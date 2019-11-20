@@ -15,10 +15,10 @@ namespace Note.Core.Services
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly Auth _auth;
 
-        public Books(IUnitOfWork unitOfWork, Auth identity)
+        public Books(IUnitOfWork unitOfWork, Auth auth)
         {
             _unitOfWork = unitOfWork;
-            _auth = identity;
+            _auth = auth;
         }
 
         public async Task<Book> CreateAsync(CreateBookCommand cmd)
