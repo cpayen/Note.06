@@ -1,0 +1,44 @@
+﻿@model Note.MVCWebApp.Models.Book.UpdateBookViewModel
+
+@{
+    ViewData["Title"] = "Edit book";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Index">Books</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Details" asp-route-id="@Model.Id">@Model.Name</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+</nav>
+
+<h1>Edit book <em>@Model.Name</em></h1>
+
+<section>
+    <form method="post" asp-controller="Books" asp-action="Edit" asp-route-id="@Model.Id">
+        <div class="form-group">
+            <label asp-for="@Model.Name">Name</label>
+            <input asp-for="@Model.Name" class="form-control" />
+            <span class="text-danger">@Html.ValidationMessageFor(model => model.Name)</span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Description">Description</label>
+            <textarea asp-for="@Model.Description" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <div class="custom-control custom-checkbox">
+                <input asp-for="@Model.PublicRead" type="checkbox" class="custom-control-input">
+                <label asp-for="@Model.PublicRead" class="custom-control-label">Public read</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="custom-control custom-checkbox">
+                <input asp-for="@Model.PublicWrite" type="checkbox" class="custom-control-input">
+                <label asp-for="@Model.PublicWrite" class="custom-control-label">Public write</label>
+            </div>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Edit" />
+    </form>
+</section>
+

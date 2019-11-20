@@ -1,0 +1,19 @@
+﻿@inject Note.Core.Identity.Auth Auth
+
+<ul class="navbar-nav">
+@if (Auth.IsAuthenticated)
+{
+    <li class="nav-item">
+        <span class="navbar-text text-dark">Hello @Auth.FullName</span>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="AzureAD" asp-controller="Account" asp-action="SignOut">Sign out</a>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="AzureAD" asp-controller="Account" asp-action="SignIn">Sign in</a>
+    </li>
+}
+</ul>

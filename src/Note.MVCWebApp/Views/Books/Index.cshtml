@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Note.Core.Entities.Book>
+
+@{
+    ViewData["Title"] = "Books";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Books</li>
+    </ol>
+</nav>
+
+<h1>Books</h1>
+
+<section>
+    <ul>
+        <li>
+            <a asp-action="Create">New...</a><br />
+        </li>
+        @foreach (var book in Model)
+        {
+            <li>
+                <a asp-action="Details" asp-route-id="@book.Id">@book.Name</a>
+            </li>
+        }
+    </ul>
+</section>
