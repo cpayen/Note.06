@@ -35,7 +35,7 @@ namespace Note.Core.Identity
         }
         public string Login
         {
-            get => _currentUser.Login;
+            get => _currentUser.Login ?? "Anonymous";
         }
         public string FirstName
         {

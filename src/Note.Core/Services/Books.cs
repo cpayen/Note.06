@@ -53,8 +53,7 @@ namespace Note.Core.Services
                 throw new ArgumentException("Invalid command");
             }
             
-            //TODO: Gérer mieux l'exception (ajouter le type et l'id? standardiser le message envoyé?)
-            var book = await _unitOfWork.BookRepository.FindAsync(cmd.Id) ?? throw new NotFoundException("Entity not found.");
+            var book = await _unitOfWork.BookRepository.FindAsync(cmd.Id) ?? throw new NotFoundException(nameof(Book), cmd.Id);
 
             book.Name = cmd.Name;
             book.Description = cmd.Description;
@@ -78,12 +77,11 @@ namespace Note.Core.Services
         {
             // Controle...
             var user = await _auth.GetCurrentUserEntityAsync();
-            var book = await _unitOfWork.BookRepository.FindAsync(id) ?? throw new NotFoundException("Book entity not found");
+            var book = await _unitOfWork.BookRepository.FindAsync(id) ?? throw new NotFoundException(nameof(Book), id);
 
             if(!_auth.CanRead(book))
             {
-                //TODO: Mieux gérer l'exception
-                throw new NotAllowedException("");
+                throw new NotAllowedException(_auth.Login, nameof(Book), id);
             }
 
             return book;
