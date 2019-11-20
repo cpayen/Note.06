@@ -1,11 +1,5 @@
 ﻿namespace Note.Core.Identity
 {
-    public struct Roles
-    {
-        public static string AppUser = "APP_USER";
-        public static string AppAdmin = "APP_ADMIN";
-    }
-
     public interface ICurrentUser
     {
         public bool IsAuthenticated { get; }

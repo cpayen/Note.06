@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace Note.Core.Identity
 {
+    public static class Roles
+    {
+        public static string AppUser = "APP_USER";
+        public static string AppAdmin = "APP_ADMIN";
+    }
+
     public class Auth
     {
         #region Props
