@@ -1,9 +1,12 @@
 ﻿using Note.Core.Enums;
 using Note.Core.Services.Commands.Base;
 using System;
+using System.Text;
 
 namespace Note.Core.Services.Commands
 {
+    #region Create
+
     public class CreateBookCommand : ICommand
     {
         public string Name { get; set; }
@@ -19,11 +22,11 @@ namespace Note.Core.Services.Commands
             WriteAccess = writeAccess;
         }
 
-        public bool IsValid 
-        { 
+        public bool IsValid
+        {
             get
             {
-                if(string.IsNullOrEmpty(Name) || Name.Length > 250)
+                if (string.IsNullOrEmpty(Name) || Name.Length > 250)
                 {
                     return false;
                 }
@@ -32,7 +35,22 @@ namespace Note.Core.Services.Commands
             }
         }
 
+        public override string ToString()
+        {
+            return new StringBuilder()
+                .AppendLine($"CreateBookCommand details:")
+                .AppendLine($"   Name = {Name}")
+                .AppendLine($"   Description = {Description}")
+                .AppendLine($"   ReadAccess = {ReadAccess}")
+                .AppendLine($"   WriteAccess = {WriteAccess}")
+                .ToString();
+        }
+
     }
+
+    #endregion
+
+    #region Update
 
     public class UpdateBookCommand : ICommand
     {
@@ -55,7 +73,7 @@ namespace Note.Core.Services.Commands
         {
             get
             {
-                if(Id == Guid.Empty)
+                if (Id == Guid.Empty)
                 {
                     return false;
                 }
@@ -68,5 +86,19 @@ namespace Note.Core.Services.Commands
                 return true;
             }
         }
+
+        public override string ToString()
+        {
+            return new StringBuilder()
+                .AppendLine($"UpdateBookCommand details:")
+                .AppendLine($"   Id = {Id}")
+                .AppendLine($"   Name = {Name}")
+                .AppendLine($"   Description = {Description}")
+                .AppendLine($"   ReadAccess = {ReadAccess}")
+                .AppendLine($"   WriteAccess = {WriteAccess}")
+                .ToString();
+        }
     }
+
+    #endregion
 }

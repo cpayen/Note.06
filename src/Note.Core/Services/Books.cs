@@ -23,10 +23,10 @@ namespace Note.Core.Services
 
         public async Task<Book> CreateAsync(CreateBookCommand cmd)
         {
+            cmd.Name = null;
             if(!cmd.IsValid)
             {
-                //TODO: Mieux gérer les exceptions...
-                throw new ArgumentException("Invalid command");
+                throw new InvalidCommandException(nameof(CreateBookCommand), cmd);
             }
 
             var book = new Book
@@ -49,10 +49,9 @@ namespace Note.Core.Services
         {
             if (!cmd.IsValid)
             {
-                //TODO: Mieux gérer les exceptions...
-                throw new ArgumentException("Invalid command");
+                throw new InvalidCommandException(nameof(UpdateBookCommand), cmd);
             }
-            
+
             var book = await _unitOfWork.BookRepository.FindAsync(cmd.Id) ?? throw new NotFoundException(nameof(Book), cmd.Id);
 
             book.Name = cmd.Name;
