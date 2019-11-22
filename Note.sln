@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Note.Core", "src\Note.Core\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Note.Infra.Data.SqlServer", "src\Note.Infra.Data.SqlServer\Note.Infra.Data.SqlServer.csproj", "{B4788327-37D6-4626-B717-417E64616AEE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Note.Core.Tests", "test\Note.Core.Tests\Note.Core.Tests.csproj", "{5187C4B9-4627-49D0-9ACF-F4C8A45BA446}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Note.Core.Tests", "tests\Note.Core.Tests\Note.Core.Tests.csproj", "{5187C4B9-4627-49D0-9ACF-F4C8A45BA446}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{7FF69684-BC7B-419F-A745-46EF51FE613F}"
 EndProject
