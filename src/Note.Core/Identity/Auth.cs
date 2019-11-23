@@ -15,6 +15,8 @@ namespace Note.Core.Identity
 
     public class Auth
     {
+        public const string AnonymousUserLogin = "Nnonymous";
+
         #region Props
 
         protected readonly IUnitOfWork _unitOfWork;
@@ -41,7 +43,7 @@ namespace Note.Core.Identity
         }
         public string Login
         {
-            get => _currentUser.Login ?? "Anonymous";
+            get => _currentUser.Login ?? AnonymousUserLogin;
         }
         public string FirstName
         {
@@ -64,12 +66,14 @@ namespace Note.Core.Identity
                 $"{_currentUser.FirstName} {_currentUser.LastName}" :
                 _currentUser.Login;
         }
+        public bool IsAdmin
+        {
+            get => _currentUser.HasRole(Roles.AppAdmin);
+        }
 
         #endregion
 
         #region Public access informations
-
-        public bool IsAdmin() => _currentUser.HasRole(Roles.AppAdmin);
 
         public bool Owns(IOwned item)
         {
@@ -78,6 +82,8 @@ namespace Note.Core.Identity
                 //TODO: throw exception properly
                 throw new ArgumentNullException();
             }
+
+            //TODO: Check item.Owner is loaded
 
             return item.Owner.Login == _currentUser.Login;
         }
