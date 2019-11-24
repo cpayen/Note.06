@@ -13,9 +13,9 @@ namespace Note.Core.Services
     public class Books
     {
         protected readonly IUnitOfWork _unitOfWork;
-        protected readonly Auth _auth;
+        protected readonly IAuth _auth;
 
-        public Books(IUnitOfWork unitOfWork, Auth auth)
+        public Books(IUnitOfWork unitOfWork, IAuth auth)
         {
             _unitOfWork = unitOfWork;
             _auth = auth;
@@ -23,7 +23,6 @@ namespace Note.Core.Services
 
         public async Task<Book> CreateAsync(CreateBookCommand cmd)
         {
-            cmd.Name = null;
             if(!cmd.IsValid)
             {
                 throw new InvalidCommandException(nameof(CreateBookCommand), cmd);

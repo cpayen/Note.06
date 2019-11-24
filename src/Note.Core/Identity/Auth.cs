@@ -13,7 +13,7 @@ namespace Note.Core.Identity
         public static string AppAdmin = "APP_ADMIN";
     }
 
-    public class Auth
+    public class Auth : IAuth
     {
         public const string AnonymousUserLogin = "Nnonymous";
 
@@ -99,9 +99,9 @@ namespace Note.Core.Identity
 
         #endregion
 
-        #region Internal entity
+        #region Entity
 
-        internal async Task<User> GetCurrentUserEntityAsync()
+        public async Task<User> GetCurrentUserEntityAsync()
         {
             if (_currentUserEntity == null)
             {
