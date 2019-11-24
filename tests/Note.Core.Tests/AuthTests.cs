@@ -1,4 +1,5 @@
-﻿using Note.Core.Identity;
+﻿using Note.Core.Enums;
+using Note.Core.Identity;
 using Note.Core.Tests.Mocks;
 using Xunit;
 
@@ -14,29 +15,75 @@ namespace Note.Core.Tests
         [InlineData(null, "", "login", "login")]
         [InlineData(null, null, "login", "login")]
         [InlineData("", "", "login", "login")]
-        public void FullName(string firstName, string lastName, string login, string expected)
+        public void UserFullName(string firstName, string lastName, string login, string expected)
         {
-            var auth = AuthMock.Get(firstName, lastName, login);
+            var auth = new Auth(null, ICurrentUserMock.GetAuthenticatedUser(login, firstName, lastName));
             var actual = auth.FullName;
             Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void AssertIsAdmin()
+        public void AuthenticatedUserIsAdmin()
         {
-            var auth = AuthMock.Get(Roles.AppAdmin);
-            var expected = true;
-            var actual = auth.IsAdmin;
-            Assert.Equal(expected, actual);
+            var auth = new Auth(null, ICurrentUserMock.GetAuthenticatedUserWithRoles("UserLogin", Roles.AppAdmin));
+            Assert.True(auth.IsAdmin);
         }
 
         [Fact]
-        public void AssertIsNotAdmin()
+        public void AuthenticatedUserIsNotAdmin()
         {
-            var auth = AuthMock.Get(Roles.AppUser);
-            var expected = false;
-            var actual = auth.IsAdmin;
-            Assert.Equal(expected, actual);
+            var auth = new Auth(null, ICurrentUserMock.GetAuthenticatedUserWithRoles("UserLogin", Roles.AppUser));
+            Assert.False(auth.IsAdmin);
+        }
+
+        [Fact]
+        public void AnonymousUserIsNotAdmin()
+        {
+            var auth = new Auth(null, ICurrentUserMock.GetAnonymousUser());
+            Assert.False(auth.IsAdmin);
+        }
+
+        [Fact]
+        public void AuthenticatedUserOwnsItem()
+        {
+            var login = "UserLogin";
+            var auth = new Auth(null, ICurrentUserMock.GetAuthenticatedUser(login));
+            var owned = IOwnedMock.Get(login, Access.Private, Access.Private);
+            Assert.True(auth.Owns(owned));
+        }
+
+        [Fact]
+        public void AuthenticatedUserDontOwnsItem()
+        {
+            var login1 = "UserLogin1";
+            var login2 = "UserLogin2";
+            var auth = new Auth(null, ICurrentUserMock.GetAuthenticatedUser(login1));
+            var owned = IOwnedMock.Get(login2, Access.Private, Access.Private);
+            Assert.False(auth.Owns(owned));
+        }
+
+        [Fact]
+        public void AnonymousUserDontOwnsItem()
+        {
+            var auth = new Auth(null, ICurrentUserMock.GetAnonymousUser());
+            var owned = IOwnedMock.Get(null, Access.Private, Access.Private);
+            Assert.False(auth.Owns(owned));
+        }
+
+        [Fact]
+        public void AnonymousUserCanReadPublicItem()
+        {
+            var auth = new Auth(null, ICurrentUserMock.GetAnonymousUser());
+            var owned = IOwnedMock.Get(null, Access.Public, Access.Private);
+            Assert.True(auth.CanRead(owned));
+        }
+
+        [Fact]
+        public void AnonymousUserCantReadPrivateItem()
+        {
+            var auth = new Auth(null, ICurrentUserMock.GetAnonymousUser());
+            var owned = IOwnedMock.Get(null, Access.Private, Access.Private);
+            Assert.False(auth.CanRead(owned));
         }
     }
 }

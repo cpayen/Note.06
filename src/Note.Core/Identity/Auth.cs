@@ -84,8 +84,7 @@ namespace Note.Core.Identity
             }
 
             //TODO: Check item.Owner is loaded
-
-            return item.Owner.Login == _currentUser.Login;
+            return _currentUser.IsAuthenticated && item.Owner.Login == _currentUser.Login;
         }
 
         public bool CanRead(IOwned item)
