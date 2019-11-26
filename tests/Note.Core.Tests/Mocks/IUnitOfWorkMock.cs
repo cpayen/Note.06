@@ -1,13 +1,16 @@
 ﻿using Moq;
 using Note.Core.Data;
 using Note.Core.Data.Repositories;
-using Note.Core.Entities;
-using System.Collections.Generic;
 
 namespace Note.Core.Tests.Mocks
 {
     public static class IUnitOfWorkMock
     {
+        public static IUnitOfWork Get()
+        {
+            return Get(IBookRepositoryMock.Get());
+        }
+
         public static IUnitOfWork Get(IBookRepository bookRepository)
         {
             var mock = new Mock<IUnitOfWork>();

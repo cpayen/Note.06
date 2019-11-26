@@ -6,7 +6,6 @@ using Note.Core.Services;
 using Note.Core.Services.Commands;
 using Note.Core.Tests.Mocks;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -15,7 +14,7 @@ namespace Note.Core.Tests
     public class BooksTests
     {
         [Fact]
-        public async Task CreateAsyncInvalidCommandAsync()
+        public async Task CreateAsync_InvalidCommand()
         {
             var books = new Books(null, null);
             var invalidCmd = new CreateBookCommand(null, null, Access.Private, Access.Private);
@@ -23,15 +22,55 @@ namespace Note.Core.Tests
         }
 
         [Fact]
-        public async Task UpdateAsyncInvalidCommandAsync()
+        public async Task CreateAsync_CheckResult()
+        {
+            var title = "Book's title";
+            var description = "Book's description";
+            var readAccess = Access.Private;
+            var writreAccess = Access.Private;
+
+            var uow = IUnitOfWorkMock.Get();
+            var auth = IAuthMock.Get();
+            var books = new Books(uow, auth);
+            var cmd = new CreateBookCommand(title, description, readAccess, writreAccess);
+            var book = await books.CreateAsync(cmd);
+            
+            Assert.Equal(title, book.Name);
+            Assert.Equal(description, book.Description);
+            Assert.Equal(readAccess, book.ReadAccess);
+            Assert.Equal(writreAccess, book.WriteAccess);
+        }
+
+        [Fact]
+        public async Task UpdateAsync_InvalidCommand()
         {
             var books = new Books(null, null);
             var invalidCmd = new UpdateBookCommand(Guid.NewGuid(), null, null, Access.Private, Access.Private);
             await Assert.ThrowsAsync<InvalidCommandException>(() => books.UpdateAsync(invalidCmd));
         }
+        
+        [Fact]
+        public async Task UpdateAsync_ChecResult()
+        {
+            var title = "Book's title";
+            var description = "Book's description";
+            var readAccess = Access.Private;
+            var writreAccess = Access.Private;
+
+            var auth = IAuthMock.GetIOwnedNotAllowed();
+            var uow = IUnitOfWorkMock.Get(IBookRepositoryMock.GetFindAsync(_book));
+            var books = new Books(uow, auth);
+            var cmd = new UpdateBookCommand(_book.Id, title, description, readAccess, writreAccess);
+            var book = await books.UpdateAsync(cmd);
+
+            Assert.Equal(title, book.Name);
+            Assert.Equal(description, book.Description);
+            Assert.Equal(readAccess, book.ReadAccess);
+            Assert.Equal(writreAccess, book.WriteAccess);
+        }
 
         [Fact]
-        public async Task FindAyncNotFound()
+        public async Task FindAync_NotFound()
         {
             var uow = IUnitOfWorkMock.Get(IBookRepositoryMock.GetFindAsync(null));
             var auth = new Auth(null, ICurrentUserMock.GetAnonymousUser());
@@ -40,7 +79,7 @@ namespace Note.Core.Tests
         }
 
         [Fact]
-        public async Task FindAyncNotAllowed()
+        public async Task FindAync_NotAllowed()
         {
             var auth = IAuthMock.GetIOwnedNotAllowed();
             var uow = IUnitOfWorkMock.Get(IBookRepositoryMock.GetFindAsync(_book));
@@ -54,31 +93,6 @@ namespace Note.Core.Tests
             Name = "Book 1",
             ReadAccess = Access.Public,
             WriteAccess = Access.Public,
-        };
-
-        private static List<Book> _bookList = new List<Book>
-        {
-            new Book
-            {
-                Id = new Guid("8a2109b0-7d55-4fc2-9eb1-57f30ebd6040"),
-                Name = "Book 1",
-                ReadAccess = Access.Public,
-                WriteAccess = Access.Public,
-            },
-            new Book
-            {
-                Id = new Guid("d6d324f1-3d46-4447-a38c-254499416adf"),
-                Name = "Book 2",
-                ReadAccess = Access.Public,
-                WriteAccess = Access.Public,
-            },
-            new Book
-            {
-                Id = new Guid("bad7bf5c-db83-4a1a-93ad-d8f0a0269bbc"),
-                Name = "Book 3",
-                ReadAccess = Access.Public,
-                WriteAccess = Access.Public,
-            }
         };
     }
 }

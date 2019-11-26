@@ -8,6 +8,12 @@ namespace Note.Core.Tests.Mocks
 {
     public static class IBookRepositoryMock
     {
+        public static IBookRepository Get()
+        {
+            var mock = new Mock<IBookRepository>();
+            return mock.Object;
+        }
+
         public static IBookRepository GetFindAsync(Book book)
         {
             var mock = new Mock<IBookRepository>();
