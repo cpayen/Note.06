@@ -42,7 +42,7 @@ namespace Note.MVCWebApp
             services.AddScoped<ICurrentUser, CurrentUser>();
 
             // Domain services
-            services.AddScoped<Auth>();
+            services.AddScoped<IAuth, Auth>();
             services.AddScoped<Users>();
             services.AddScoped<Books>();
 
