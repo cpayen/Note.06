@@ -13,7 +13,6 @@ namespace Note.Core.Entities
         public State State { get; set; }
         public Access ReadAccess { get; set; }
         public Access WriteAccess { get; set; }
-        public PageType Type { get; set; }
         public virtual User Owner { get; set; }
         public virtual Book Book { get; set; }
         

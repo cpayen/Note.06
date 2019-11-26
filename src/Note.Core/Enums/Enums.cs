@@ -11,10 +11,4 @@
         Private,
         Public
     }
-
-    public enum PageType
-    {
-        Page,
-        Idea
-    }
 }
