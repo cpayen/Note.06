@@ -61,7 +61,7 @@ namespace Note.MVCWebApp.Controllers
             {
                 var book = await _books.CreateAsync(
                     new CreateBookCommand(
-                        vm.Name,
+                        vm.Title,
                         vm.Description,
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));
@@ -83,7 +83,7 @@ namespace Note.MVCWebApp.Controllers
             var model = new UpdateBookViewModel
             {
                 Id = book.Id,
-                Name = book.Name,
+                Title = book.Title,
                 Description = book.Description,
                 PublicRead = book.ReadAccess == Access.Public,
                 PublicWrite = book.WriteAccess == Access.Public
@@ -105,7 +105,7 @@ namespace Note.MVCWebApp.Controllers
                 var book = await _books.UpdateAsync(
                     new UpdateBookCommand(
                         id,
-                        vm.Name,
+                        vm.Title,
                         vm.Description,
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));

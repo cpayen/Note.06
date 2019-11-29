@@ -35,7 +35,7 @@ namespace Note.Core.Tests
             var cmd = new CreateBookCommand(title, description, readAccess, writreAccess);
             var book = await books.CreateAsync(cmd);
             
-            Assert.Equal(title, book.Name);
+            Assert.Equal(title, book.Title);
             Assert.Equal(description, book.Description);
             Assert.Equal(readAccess, book.ReadAccess);
             Assert.Equal(writreAccess, book.WriteAccess);
@@ -63,7 +63,7 @@ namespace Note.Core.Tests
             var cmd = new UpdateBookCommand(_book.Id, title, description, readAccess, writreAccess);
             var book = await books.UpdateAsync(cmd);
 
-            Assert.Equal(title, book.Name);
+            Assert.Equal(title, book.Title);
             Assert.Equal(description, book.Description);
             Assert.Equal(readAccess, book.ReadAccess);
             Assert.Equal(writreAccess, book.WriteAccess);
@@ -90,7 +90,7 @@ namespace Note.Core.Tests
         private static Book _book = new Book
         {
             Id = new Guid("8a2109b0-7d55-4fc2-9eb1-57f30ebd6040"),
-            Name = "Book 1",
+            Title = "Book 1",
             ReadAccess = Access.Public,
             WriteAccess = Access.Public,
         };

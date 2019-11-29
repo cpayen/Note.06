@@ -9,14 +9,14 @@ namespace Note.Core.Services.Commands
 
     public class CreateBookCommand : ICommand
     {
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         public Access ReadAccess { get; set; }
         public Access WriteAccess { get; set; }
 
-        public CreateBookCommand(string name, string description, Access readAccess, Access writeAccess)
+        public CreateBookCommand(string title, string description, Access readAccess, Access writeAccess)
         {
-            Name = name;
+            Title = title;
             Description = description;
             ReadAccess = readAccess;
             WriteAccess = writeAccess;
@@ -26,7 +26,7 @@ namespace Note.Core.Services.Commands
         {
             get
             {
-                if (string.IsNullOrEmpty(Name) || Name.Length > 250)
+                if (string.IsNullOrEmpty(Title) || Title.Length > 250)
                 {
                     return false;
                 }
@@ -39,7 +39,7 @@ namespace Note.Core.Services.Commands
         {
             return new StringBuilder()
                 .AppendLine($"CreateBookCommand details:")
-                .AppendLine($"   Name = {Name}")
+                .AppendLine($"   Title = {Title}")
                 .AppendLine($"   Description = {Description}")
                 .AppendLine($"   ReadAccess = {ReadAccess}")
                 .AppendLine($"   WriteAccess = {WriteAccess}")
@@ -55,15 +55,15 @@ namespace Note.Core.Services.Commands
     public class UpdateBookCommand : ICommand
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         public Access ReadAccess { get; set; }
         public Access WriteAccess { get; set; }
 
-        public UpdateBookCommand(Guid id, string name, string description, Access readAccess, Access writeAccess)
+        public UpdateBookCommand(Guid id, string title, string description, Access readAccess, Access writeAccess)
         {
             Id = id;
-            Name = name;
+            Title = title;
             Description = description;
             ReadAccess = readAccess;
             WriteAccess = writeAccess;
@@ -78,7 +78,7 @@ namespace Note.Core.Services.Commands
                     return false;
                 }
 
-                if (string.IsNullOrEmpty(Name) || Name.Length > 250)
+                if (string.IsNullOrEmpty(Title) || Title.Length > 250)
                 {
                     return false;
                 }
@@ -92,7 +92,7 @@ namespace Note.Core.Services.Commands
             return new StringBuilder()
                 .AppendLine($"UpdateBookCommand details:")
                 .AppendLine($"   Id = {Id}")
-                .AppendLine($"   Name = {Name}")
+                .AppendLine($"   Title = {Title}")
                 .AppendLine($"   Description = {Description}")
                 .AppendLine($"   ReadAccess = {ReadAccess}")
                 .AppendLine($"   WriteAccess = {WriteAccess}")

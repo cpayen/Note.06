@@ -21,7 +21,7 @@
         @foreach (var book in Model)
         {
             <li>
-                <a asp-action="Details" asp-route-id="@book.Id">@book.Name</a>
+                <a asp-action="Details" asp-route-id="@book.Id">@book.Title</a>
             </li>
         }
     </ul>

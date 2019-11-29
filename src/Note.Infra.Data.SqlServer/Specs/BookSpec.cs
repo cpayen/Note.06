@@ -10,10 +10,10 @@ namespace Note.Infra.Data.SqlServer.Specs
             EntitySpec<Book>.SetEntitySpecs(entityBuilder);
 
             entityBuilder
-                .HasIndex(o => o.Name);
+                .HasIndex(o => o.Title);
 
             entityBuilder
-                .Property(o => o.Name)
+                .Property(o => o.Title)
                 .IsRequired()
                 .HasMaxLength(250);
 

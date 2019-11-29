@@ -8,13 +8,13 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
         <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Index">Books</a></li>
-        <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Details" asp-route-id="@Model.Id">@Model.Name</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Details" asp-route-id="@Model.Id">@Model.Title</a></li>
         <li class="breadcrumb-item active" aria-current="page">Delete</li>
     </ol>
 </nav>
 
 
-<h1>Delete book <em>@Model.Name</em></h1>
+<h1>Delete book <em>@Model.Title</em></h1>
 
 Created @Model.CreatedAt.ToShortDateString() by @Model.Owner.FullName
 @if (Model.UpdatedAt.HasValue)

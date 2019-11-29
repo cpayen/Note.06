@@ -30,7 +30,7 @@ namespace Note.Core.Services
 
             var book = new Book
             {
-                Name = cmd.Name,
+                Title = cmd.Title,
                 Description = cmd.Description,
                 ReadAccess = cmd.ReadAccess,
                 WriteAccess = cmd.WriteAccess,
@@ -53,7 +53,7 @@ namespace Note.Core.Services
 
             var book = await _unitOfWork.BookRepository.FindAsync(cmd.Id) ?? throw new NotFoundException(nameof(Book), cmd.Id);
 
-            book.Name = cmd.Name;
+            book.Title = cmd.Title;
             book.Description = cmd.Description;
             book.ReadAccess = cmd.ReadAccess;
             book.WriteAccess = cmd.WriteAccess;

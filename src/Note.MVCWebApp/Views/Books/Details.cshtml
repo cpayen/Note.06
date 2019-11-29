@@ -8,11 +8,11 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
         <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Index">Books</a></li>
-        <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
     </ol>
 </nav>
 
-<h1>@Model.Name</h1>
+<h1>@Model.Title</h1>
 
 <section>
     Created @Model.CreatedAt.ToShortDateString() by @Model.Owner.FullName |
