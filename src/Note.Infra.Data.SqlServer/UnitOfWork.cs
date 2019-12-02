@@ -9,13 +9,14 @@ namespace Note.Infra.Data.SQLServer
     public class UnitOfWork : IUnitOfWork
     {
         private readonly Context _context;
+        private IUserRepository _userRepository;
+        private IBookRepository _bookRepository;
+        private IPageRepository _pageRepository;
 
         public UnitOfWork(Context context)
         {
             _context = context;
         }
-
-        private IUserRepository _userRepository;
 
         public IUserRepository UserRepository
         {
@@ -29,9 +30,6 @@ namespace Note.Infra.Data.SQLServer
             }
         }
 
-
-        private IBookRepository _bookRepository;
-
         public IBookRepository BookRepository
         {
             get
@@ -41,6 +39,18 @@ namespace Note.Infra.Data.SQLServer
                     _bookRepository = new BookRepository(_context);
                 }
                 return _bookRepository;
+            }
+        }
+
+        public IPageRepository PageRepository
+        {
+            get
+            {
+                if (_pageRepository == null)
+                {
+                    _pageRepository = new PageRepository(_context);
+                }
+                return _pageRepository;
             }
         }
 

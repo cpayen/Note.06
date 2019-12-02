@@ -1,4 +1,4 @@
-﻿@model Note.Core.Entities.Book
+﻿@model Note.Core.Entities.Page
 
 @{
     ViewData["Title"] = "Details";
@@ -8,6 +8,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
         <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Index">Books</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Details" asp-route-id="@Model.Book.Id">@Model.Book.Title</a></li>
         <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
     </ol>
 </nav>
@@ -20,18 +21,6 @@
     {
         <text>Updated @Model.UpdatedAt.Value.ToShortDateString() | </text>
     }
-    <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-controller="Books" asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
-    <a asp-controller="Pages" asp-action="Create" asp-route-bookId="@Model.Id">New page</a>
-</section>
-
-<h2>Pages</h2>
-
-<section>
-    <ul>
-        @foreach (var p in Model.Pages)
-        {
-            <li><a asp-controller="Pages" asp-action="Details" asp-route-bookId="@Model.Id" asp-route-id="@p.Id">@p.Title</a></li>
-        }
-    </ul>
+    <a asp-controller="Pages" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-controller="Pages" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
 </section>

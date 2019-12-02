@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Note.Core.Enums;
 using Note.Core.Services;
+using Note.Core.Services.Commands;
 using Note.MVCWebApp.Models.Page;
 
 namespace Note.MVCWebApp.Controllers
@@ -23,49 +25,50 @@ namespace Note.MVCWebApp.Controllers
             _logger = logger;
         }
 
-        //[AllowAnonymous]
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> DetailsAsync(Guid id)
-        //{
-        //    var model = await _books.FindAsync(id);
-        //    return View(model);
-        //}
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> DetailsAsync(Guid bookId, Guid id)
+        {
+            var model = await _pages.FindAsync(id);
+            return View(model);
+        }
 
         [HttpGet("create")]
         public IActionResult Create(Guid bookId)
         {
             return View(new CreatePageViewModel
             {
+                BookId = bookId,
                 PublicRead = true
             });
         }
 
-        //[HttpPost("create")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> CreateAsync(CreateBookViewModel vm)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View();
-        //    }
+        [HttpPost("create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateAsync(CreatePageViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
 
-        //    try
-        //    {
-        //        var book = await _books.CreateAsync(
-        //            new CreateBookCommand(
-        //                vm.Name,
-        //                vm.Description,
-        //                vm.PublicRead ? Access.Public : Access.Private,
-        //                vm.PublicWrite ? Access.Public : Access.Private));
+            try
+            {
+                var page = await _pages.CreateAsync(
+                    new CreatePageCommand(
+                        vm.BookId,
+                        vm.Title,
+                        vm.PublicRead ? Access.Public : Access.Private,
+                        vm.PublicWrite ? Access.Public : Access.Private));
 
-        //        return RedirectToAction("Details", new { id = book.Id });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //TODO: Gérer les exceptions argument etc.
-        //        _logger.LogError(ex, ex.Message);
-        //        return View();
-        //    }
-        //}
+                return RedirectToAction("Details", new { bookId = page.Book.Id, id = page.Id });
+            }
+            catch (Exception ex)
+            {
+                //TODO: Gérer les exceptions argument etc.
+                _logger.LogError(ex, ex.Message);
+                return View();
+            }
+        }
     }
 }

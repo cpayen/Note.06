@@ -11,8 +11,8 @@ namespace Note.Core.Data.Repositories
         Task<ICollection<Page>> GetAllAsync();
         Task<ICollection<Page>> FindByAsync(Expression<Func<Book, bool>> predicate);
         Task<Page> FindAsync(Guid id);
-        Page Create(IPageRepository page);
-        Page Update(IPageRepository page);
+        Page Create(Page page);
+        Page Update(Page page);
         void Delete(Guid id);
     }
 }
