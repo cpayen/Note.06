@@ -54,7 +54,7 @@ namespace Note.MVCWebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(vm);
             }
 
             try
@@ -62,6 +62,7 @@ namespace Note.MVCWebApp.Controllers
                 var book = await _books.CreateAsync(
                     new CreateBookCommand(
                         vm.Title,
+                        vm.Slug,
                         vm.Description,
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));
@@ -84,6 +85,7 @@ namespace Note.MVCWebApp.Controllers
             {
                 Id = book.Id,
                 Title = book.Title,
+                Slug = book.Slug,
                 Description = book.Description,
                 PublicRead = book.ReadAccess == Access.Public,
                 PublicWrite = book.WriteAccess == Access.Public
@@ -97,7 +99,7 @@ namespace Note.MVCWebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(vm);
             }
 
             try
@@ -106,6 +108,7 @@ namespace Note.MVCWebApp.Controllers
                     new UpdateBookCommand(
                         id,
                         vm.Title,
+                        vm.Slug,
                         vm.Description,
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));

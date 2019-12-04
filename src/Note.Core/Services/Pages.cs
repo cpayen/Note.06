@@ -51,6 +51,7 @@ namespace Note.Core.Services
             {
                 Book = book,
                 Title = cmd.Title,
+                Slug = cmd.Slug,
                 ReadAccess = cmd.ReadAccess,
                 WriteAccess = cmd.WriteAccess,
                 Owner = await _auth.GetCurrentUserEntityAsync(),
@@ -73,6 +74,7 @@ namespace Note.Core.Services
             var page = await _unitOfWork.PageRepository.FindAsync(cmd.Id) ?? throw new NotFoundException(nameof(Page), cmd.Id);
 
             page.Title = cmd.Title;
+            page.Slug = cmd.Slug;
             page.ReadAccess = cmd.ReadAccess;
             page.WriteAccess = cmd.WriteAccess;
             page.UpdatedAt = DateTime.Now;

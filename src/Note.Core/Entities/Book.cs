@@ -10,6 +10,7 @@ namespace Note.Core.Entities
         #region Props
 
         public string Title { get; set; }
+        public string Slug { get; set; }
         public string Description { get; set; }
         public Access ReadAccess { get; set; }
         public Access WriteAccess { get; set; }

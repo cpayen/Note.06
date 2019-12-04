@@ -17,7 +17,7 @@ namespace Note.Core.Tests
         public async Task CreateAsync_InvalidCommand()
         {
             var books = new Books(null, null);
-            var invalidCmd = new CreateBookCommand(null, null, Access.Private, Access.Private);
+            var invalidCmd = new CreateBookCommand(null, null, null, Access.Private, Access.Private);
             await Assert.ThrowsAsync<InvalidCommandException>(() => books.CreateAsync(invalidCmd));
         }
 
@@ -25,6 +25,7 @@ namespace Note.Core.Tests
         public async Task CreateAsync_CheckResult()
         {
             var title = "Book's title";
+            var slug = "books-title";
             var description = "Book's description";
             var readAccess = Access.Private;
             var writreAccess = Access.Private;
@@ -32,10 +33,11 @@ namespace Note.Core.Tests
             var uow = IUnitOfWorkMock.Get();
             var auth = IAuthMock.Get();
             var books = new Books(uow, auth);
-            var cmd = new CreateBookCommand(title, description, readAccess, writreAccess);
+            var cmd = new CreateBookCommand(title, slug, description, readAccess, writreAccess);
             var book = await books.CreateAsync(cmd);
             
             Assert.Equal(title, book.Title);
+            Assert.Equal(slug, book.Slug);
             Assert.Equal(description, book.Description);
             Assert.Equal(readAccess, book.ReadAccess);
             Assert.Equal(writreAccess, book.WriteAccess);
@@ -45,7 +47,7 @@ namespace Note.Core.Tests
         public async Task UpdateAsync_InvalidCommand()
         {
             var books = new Books(null, null);
-            var invalidCmd = new UpdateBookCommand(Guid.NewGuid(), null, null, Access.Private, Access.Private);
+            var invalidCmd = new UpdateBookCommand(Guid.NewGuid(), null, null, null, Access.Private, Access.Private);
             await Assert.ThrowsAsync<InvalidCommandException>(() => books.UpdateAsync(invalidCmd));
         }
         
@@ -53,6 +55,7 @@ namespace Note.Core.Tests
         public async Task UpdateAsync_ChecResult()
         {
             var title = "Book's title";
+            var slug = "books-title";
             var description = "Book's description";
             var readAccess = Access.Private;
             var writreAccess = Access.Private;
@@ -60,10 +63,11 @@ namespace Note.Core.Tests
             var auth = IAuthMock.GetIOwnedNotAllowed();
             var uow = IUnitOfWorkMock.Get(IBookRepositoryMock.GetFindAsync(_book));
             var books = new Books(uow, auth);
-            var cmd = new UpdateBookCommand(_book.Id, title, description, readAccess, writreAccess);
+            var cmd = new UpdateBookCommand(_book.Id, title, slug, description, readAccess, writreAccess);
             var book = await books.UpdateAsync(cmd);
 
             Assert.Equal(title, book.Title);
+            Assert.Equal(slug, book.Slug);
             Assert.Equal(description, book.Description);
             Assert.Equal(readAccess, book.ReadAccess);
             Assert.Equal(writreAccess, book.WriteAccess);

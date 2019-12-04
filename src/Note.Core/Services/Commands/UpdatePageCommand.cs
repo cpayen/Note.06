@@ -9,13 +9,15 @@ namespace Note.Core.Services.Commands
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        public string Slug { get; set; }
         public Access ReadAccess { get; set; }
         public Access WriteAccess { get; set; }
 
-        public UpdatePageCommand(Guid id, string title, Access readAccess, Access writeAccess)
+        public UpdatePageCommand(Guid id, string title, string slug, Access readAccess, Access writeAccess)
         {
             Id = id;
             Title = title;
+            Slug = slug;
             ReadAccess = readAccess;
             WriteAccess = writeAccess;
         }
@@ -34,6 +36,11 @@ namespace Note.Core.Services.Commands
                     return false;
                 }
 
+                if (string.IsNullOrEmpty(Slug) || Slug.Length > 100)
+                {
+                    return false;
+                }
+
                 return true;
             }
         }
@@ -44,6 +51,7 @@ namespace Note.Core.Services.Commands
                 .AppendLine($"UpdatePageCommand details:")
                 .AppendLine($"   Id = {Id}")
                 .AppendLine($"   Title = {Title}")
+                .AppendLine($"   Slug = {Slug}")
                 .AppendLine($"   ReadAccess = {ReadAccess}")
                 .AppendLine($"   WriteAccess = {WriteAccess}")
                 .ToString();

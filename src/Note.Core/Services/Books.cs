@@ -31,6 +31,7 @@ namespace Note.Core.Services
             var book = new Book
             {
                 Title = cmd.Title,
+                Slug = cmd.Slug,
                 Description = cmd.Description,
                 ReadAccess = cmd.ReadAccess,
                 WriteAccess = cmd.WriteAccess,
@@ -54,6 +55,7 @@ namespace Note.Core.Services
             var book = await _unitOfWork.BookRepository.FindAsync(cmd.Id) ?? throw new NotFoundException(nameof(Book), cmd.Id);
 
             book.Title = cmd.Title;
+            book.Slug = cmd.Slug;
             book.Description = cmd.Description;
             book.ReadAccess = cmd.ReadAccess;
             book.WriteAccess = cmd.WriteAccess;

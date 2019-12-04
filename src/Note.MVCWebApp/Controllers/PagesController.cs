@@ -49,7 +49,7 @@ namespace Note.MVCWebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(vm);
             }
 
             try
@@ -58,6 +58,7 @@ namespace Note.MVCWebApp.Controllers
                     new CreatePageCommand(
                         vm.BookId,
                         vm.Title,
+                        vm.Slug,
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));
 
@@ -74,13 +75,14 @@ namespace Note.MVCWebApp.Controllers
         [HttpGet("{id}/edit")]
         public async Task<IActionResult> EditAsync(Guid bookId, Guid id)
         {
-            var book = await _pages.FindAsync(id);
+            var page = await _pages.FindAsync(id);
             var model = new UpdatePageViewModel
             {
-                Id = book.Id,
-                Title = book.Title,
-                PublicRead = book.ReadAccess == Access.Public,
-                PublicWrite = book.WriteAccess == Access.Public
+                Id = page.Id,
+                Title = page.Title,
+                Slug = page.Slug,
+                PublicRead = page.ReadAccess == Access.Public,
+                PublicWrite = page.WriteAccess == Access.Public
             };
             return View(model);
         }
@@ -91,7 +93,7 @@ namespace Note.MVCWebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(vm);
             }
 
             try
@@ -100,6 +102,7 @@ namespace Note.MVCWebApp.Controllers
                     new UpdatePageCommand(
                         id,
                         vm.Title,
+                        vm.Slug,
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));
 

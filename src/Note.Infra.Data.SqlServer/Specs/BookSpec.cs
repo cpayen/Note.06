@@ -18,6 +18,14 @@ namespace Note.Infra.Data.SqlServer.Specs
                 .HasMaxLength(250);
 
             entityBuilder
+                .HasIndex(o => o.Slug);
+
+            entityBuilder
+                .Property(o => o.Slug)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            entityBuilder
                 .HasOne(o => o.Owner)
                 .WithMany(o => o.Books)
                 .IsRequired();

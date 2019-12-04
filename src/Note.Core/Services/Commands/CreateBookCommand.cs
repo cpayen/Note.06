@@ -7,13 +7,15 @@ namespace Note.Core.Services.Commands
     public class CreateBookCommand : ICommand
     {
         public string Title { get; set; }
+        public string Slug { get; set; }
         public string Description { get; set; }
         public Access ReadAccess { get; set; }
         public Access WriteAccess { get; set; }
 
-        public CreateBookCommand(string title, string description, Access readAccess, Access writeAccess)
+        public CreateBookCommand(string title, string slug, string description, Access readAccess, Access writeAccess)
         {
             Title = title;
+            Slug = slug;
             Description = description;
             ReadAccess = readAccess;
             WriteAccess = writeAccess;
@@ -28,6 +30,11 @@ namespace Note.Core.Services.Commands
                     return false;
                 }
 
+                if (string.IsNullOrEmpty(Slug) || Slug.Length > 100)
+                {
+                    return false;
+                }
+
                 return true;
             }
         }
@@ -37,6 +44,7 @@ namespace Note.Core.Services.Commands
             return new StringBuilder()
                 .AppendLine($"CreateBookCommand details:")
                 .AppendLine($"   Title = {Title}")
+                .AppendLine($"   Slug = {Slug}")
                 .AppendLine($"   Description = {Description}")
                 .AppendLine($"   ReadAccess = {ReadAccess}")
                 .AppendLine($"   WriteAccess = {WriteAccess}")
