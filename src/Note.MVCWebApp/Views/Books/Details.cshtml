@@ -21,14 +21,14 @@
         <text>Updated @Model.UpdatedAt.Value.ToShortDateString() | </text>
     }
     <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-controller="Books" asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
-    <a asp-controller="Pages" asp-action="Create" asp-route-bookId="@Model.Id">New page</a>
+    <a asp-controller="Books" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
 </section>
 
 <h2>Pages</h2>
 
 <section>
     <ul>
+        <li><a asp-controller="Pages" asp-action="Create" asp-route-bookId="@Model.Id">New page</a></li>
         @foreach (var p in Model.Pages)
         {
             <li><a asp-controller="Pages" asp-action="Details" asp-route-bookId="@Model.Id" asp-route-id="@p.Id">@p.Title</a></li>

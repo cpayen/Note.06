@@ -34,7 +34,11 @@ namespace Note.Infra.Data.SqlServer.Repositories
 
         public void Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var page = _context.Pages.Find(id);
+            if (page != null)
+            {
+                _context.Pages.Remove(page);
+            }
         }
 
         public async Task<Page> FindAsync(Guid id)
@@ -43,19 +47,27 @@ namespace Note.Infra.Data.SqlServer.Repositories
                 .SingleOrDefaultAsync(o => o.Id == id);
         }
 
-        public Task<ICollection<Page>> FindByAsync(Expression<Func<Book, bool>> predicate)
+        public async Task<ICollection<Page>> FindByAsync(Expression<Func<Page, bool>> predicate, string login, bool isAdmin = false)
         {
-            throw new NotImplementedException();
+            return await AllowedPages(login, isAdmin)
+                .Where(predicate)
+                .ToListAsync();
         }
 
-        public Task<ICollection<Page>> GetAllAsync()
+        public async Task<ICollection<Page>> GetAllAsync(string login, bool isAdmin = false)
         {
-            throw new NotImplementedException();
+            return await AllowedPages(login, isAdmin).ToListAsync();
         }
 
         public Page Update(Page page)
         {
-            throw new NotImplementedException();
+            if (page == null)
+            {
+                throw new ArgumentNullException(nameof(page));
+            }
+
+            _context.Pages.Update(page);
+            return page;
         }
 
         #region Utils

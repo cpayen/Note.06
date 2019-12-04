@@ -1,27 +1,23 @@
-﻿@model Note.MVCWebApp.Models.Page.CreatePageViewModel
+﻿@model Note.MVCWebApp.Models.Page.UpdatePageViewModel
+
 @{
-    ViewData["Title"] = "New page";
+    ViewData["Title"] = "Edit page";
 }
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
         <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Index">Books</a></li>
-        <li class="breadcrumb-item active" aria-current="page">New page</li>
+        <li class="breadcrumb-item"><a asp-controller="Books" asp-action="Details" asp-route-id="@Model.Id">@Model.Title</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Pages" asp-action="Details" asp-route-bookId="@Model.Id" asp-route-id="@Model.Id">@Model.Title</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
     </ol>
 </nav>
 
-<h1>New page</h1>
+<h1>Edit page <em>@Model.Title</em></h1>
 
 <section>
-    
-    @*@if(!Html.ViewData.ModelState.IsValid)
-    {
-        <div class="text-danger">@Html.ValidationSummary(false)</div>
-    }*@
-
-    <form method="post" asp-controller="Pages" asp-action="Create">
-        <input type="hidden" asp-for="@Model.BookId" />
+    <form method="post" asp-controller="Pages" asp-action="Edit" asp-route-bookId="@Model.Id" asp-route-id="@Model.Id">
         <div class="form-group">
             <label asp-for="@Model.Title">Title</label>
             <input asp-for="@Model.Title" class="form-control" />
@@ -39,6 +35,7 @@
                 <label asp-for="@Model.PublicWrite" class="custom-control-label">Public write</label>
             </div>
         </div>
-        <input type="submit" class="btn btn-primary" value="Create" />
+        <input type="submit" class="btn btn-primary" value="Edit" />
     </form>
 </section>
+

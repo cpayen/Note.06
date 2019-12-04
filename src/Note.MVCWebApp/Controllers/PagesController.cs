@@ -45,7 +45,7 @@ namespace Note.MVCWebApp.Controllers
 
         [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAsync(CreatePageViewModel vm)
+        public async Task<IActionResult> CreateAsync(Guid bookId, CreatePageViewModel vm)
         {
             if (!ModelState.IsValid)
             {
@@ -66,6 +66,71 @@ namespace Note.MVCWebApp.Controllers
             catch (Exception ex)
             {
                 //TODO: Gérer les exceptions argument etc.
+                _logger.LogError(ex, ex.Message);
+                return View();
+            }
+        }
+
+        [HttpGet("{id}/edit")]
+        public async Task<IActionResult> EditAsync(Guid bookId, Guid id)
+        {
+            var book = await _pages.FindAsync(id);
+            var model = new UpdatePageViewModel
+            {
+                Id = book.Id,
+                Title = book.Title,
+                PublicRead = book.ReadAccess == Access.Public,
+                PublicWrite = book.WriteAccess == Access.Public
+            };
+            return View(model);
+        }
+
+        [HttpPost("{id}/edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAsync(Guid bookId, Guid id, UpdatePageViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            try
+            {
+                var page = await _pages.UpdateAsync(
+                    new UpdatePageCommand(
+                        id,
+                        vm.Title,
+                        vm.PublicRead ? Access.Public : Access.Private,
+                        vm.PublicWrite ? Access.Public : Access.Private));
+
+                return RedirectToAction("Details", new { bookId = bookId, id = page.Id });
+            }
+            catch (Exception ex)
+            {
+                //TODO: Gérer les exceptions argument etc.
+                _logger.LogError(ex, "Error");
+                return View();
+            }
+        }
+
+        [HttpGet("{id}/delete")]
+        public async Task<IActionResult> DeleteAsync(Guid bookId, Guid id)
+        {
+            var model = await _pages.FindAsync(id);
+            return View(model);
+        }
+
+        [HttpPost("{id}/delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExecDeleteAsync(Guid bookId, Guid id)
+        {
+            try
+            {
+                await _pages.DeleteAsync(id);
+                return RedirectToAction("Details", "Books", new { id = bookId });
+            }
+            catch (Exception ex)
+            {
                 _logger.LogError(ex, ex.Message);
                 return View();
             }

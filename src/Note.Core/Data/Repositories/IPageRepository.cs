@@ -8,8 +8,8 @@ namespace Note.Core.Data.Repositories
 {
     public interface IPageRepository
     {
-        Task<ICollection<Page>> GetAllAsync();
-        Task<ICollection<Page>> FindByAsync(Expression<Func<Book, bool>> predicate);
+        Task<ICollection<Page>> GetAllAsync(string login, bool isAdmin = false);
+        Task<ICollection<Page>> FindByAsync(Expression<Func<Page, bool>> predicate, string login, bool isAdmin = false);
         Task<Page> FindAsync(Guid id);
         Page Create(Page page);
         Page Update(Page page);
