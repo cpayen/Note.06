@@ -11,6 +11,7 @@ namespace Note.Core.Data.Repositories
         Task<ICollection<Page>> GetAllAsync(string login, bool isAdmin = false);
         Task<ICollection<Page>> FindByAsync(Expression<Func<Page, bool>> predicate, string login, bool isAdmin = false);
         Task<Page> FindAsync(Guid id);
+        Task<Page> FindAsync(string slug);
         Page Create(Page page);
         Page Update(Page page);
         void Delete(Guid id);

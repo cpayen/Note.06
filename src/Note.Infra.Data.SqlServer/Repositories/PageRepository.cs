@@ -47,6 +47,12 @@ namespace Note.Infra.Data.SqlServer.Repositories
                 .SingleOrDefaultAsync(o => o.Id == id);
         }
 
+        public async Task<Page> FindAsync(string slug)
+        {
+            return await PageWithDependingEntities()
+                .SingleOrDefaultAsync(o => o.Slug == slug);
+        }
+
         public async Task<ICollection<Page>> FindByAsync(Expression<Func<Page, bool>> predicate, string login, bool isAdmin = false)
         {
             return await AllowedPages(login, isAdmin)
