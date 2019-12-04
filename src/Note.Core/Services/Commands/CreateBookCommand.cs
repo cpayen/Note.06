@@ -1,4 +1,5 @@
 ﻿using Note.Core.Enums;
+using Note.Core.Helpers;
 using Note.Core.Services.Commands.Base;
 using System.Text;
 
@@ -30,7 +31,7 @@ namespace Note.Core.Services.Commands
                     return false;
                 }
 
-                if (string.IsNullOrEmpty(Slug) || Slug.Length > 100)
+                if (string.IsNullOrEmpty(Slug) || Slug.Length > 100 || !SlugHelper.Validate(Slug))
                 {
                     return false;
                 }
