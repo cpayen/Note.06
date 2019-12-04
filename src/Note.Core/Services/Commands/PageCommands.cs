@@ -26,6 +26,11 @@ namespace Note.Core.Services.Commands
         {
             get
             {
+                if(BookId == null)
+                {
+                    return false;
+                }
+
                 if (string.IsNullOrEmpty(Title) || Title.Length > 250)
                 {
                     return false;
