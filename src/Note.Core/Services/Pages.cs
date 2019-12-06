@@ -4,8 +4,6 @@ using Note.Core.Exceptions;
 using Note.Core.Identity;
 using Note.Core.Services.Commands;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Note.Core.Services
@@ -47,6 +45,11 @@ namespace Note.Core.Services
                 throw new NotFoundException(nameof(Book), cmd.BookId);
             }
 
+            if(!_auth.CanWrite(book))
+            {
+                throw new NotAllowedException(_auth.Login, nameof(Book), cmd.BookId);
+            }
+
             var page = new Page
             {
                 Book = book,
@@ -73,6 +76,11 @@ namespace Note.Core.Services
 
             var page = await _unitOfWork.PageRepository.FindAsync(cmd.Id) ?? throw new NotFoundException(nameof(Page), cmd.Id);
 
+            if (!_auth.CanWrite(page))
+            {
+                throw new NotAllowedException(_auth.Login, nameof(Page), cmd.Id);
+            }
+
             page.Title = cmd.Title;
             page.Slug = cmd.Slug;
             page.ReadAccess = cmd.ReadAccess;
@@ -87,6 +95,13 @@ namespace Note.Core.Services
 
         public async Task DeleteAsync(Guid id)
         {
+            var page = await _unitOfWork.PageRepository.FindAsync(id) ?? throw new NotFoundException(nameof(Page), id);
+
+            if (!_auth.CanWrite(page))
+            {
+                throw new NotAllowedException(_auth.Login, nameof(Page), id);
+            }
+
             _unitOfWork.PageRepository.Delete(id);
             await _unitOfWork.SaveAsync();
         }

@@ -54,6 +54,11 @@ namespace Note.Core.Services
 
             var book = await _unitOfWork.BookRepository.FindAsync(cmd.Id) ?? throw new NotFoundException(nameof(Book), cmd.Id);
 
+            if(!_auth.CanWrite(book))
+            {
+                throw new NotAllowedException(_auth.Login, nameof(Book), cmd.Id);
+            }
+
             book.Title = cmd.Title;
             book.Slug = cmd.Slug;
             book.Description = cmd.Description;
@@ -75,8 +80,6 @@ namespace Note.Core.Services
 
         public async Task<Book> FindAsync(Guid id)
         {
-            // Controle...
-            var user = await _auth.GetCurrentUserEntityAsync();
             var book = await _unitOfWork.BookRepository.FindAsync(id) ?? throw new NotFoundException(nameof(Book), id);
 
             if(!_auth.CanRead(book))
@@ -89,6 +92,13 @@ namespace Note.Core.Services
 
         public async Task DeleteAsync(Guid id)
         {
+            var book = await _unitOfWork.BookRepository.FindAsync(id) ?? throw new NotFoundException(nameof(Book), id);
+
+            if (!_auth.CanWrite(book))
+            {
+                throw new NotAllowedException(_auth.Login, nameof(Book), id);
+            }
+
             _unitOfWork.BookRepository.Delete(id);
             await _unitOfWork.SaveAsync();
         }
