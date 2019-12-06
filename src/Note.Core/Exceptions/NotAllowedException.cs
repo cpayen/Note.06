@@ -9,6 +9,9 @@ namespace Note.Core.Exceptions
         public NotAllowedException(string message, Exception innerException) : base(message, innerException) { }
 
         public NotAllowedException(string userLogin, string entityType, Guid entityId) 
-            : this($"User {userLogin} is not allowed to access {entityType} entity with ID {entityId}") { }
+            : this($"User {userLogin} is not allowed to access {entityType} entity with ID [{entityId}]") { }
+
+        public NotAllowedException(string userLogin, string entityType, string entitySlug)
+            : this($"User {userLogin} is not allowed to access {entityType} entity with slug [{entitySlug}]") { }
     }
 }

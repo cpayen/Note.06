@@ -9,6 +9,9 @@ namespace Note.Core.Exceptions
         public NotFoundException(string message, Exception innerException) : base(message, innerException) { }
 
         public NotFoundException(string entityType, Guid entityId) 
-            : this($"{entityType} entity with ID {entityId} not found") { }
+            : this($"{entityType} entity with ID [{entityId}] not found") { }
+
+        public NotFoundException(string entityType, string entitySlug)
+            : this($"{entityType} entity with slug [{entitySlug}] not found") { }
     }
 }

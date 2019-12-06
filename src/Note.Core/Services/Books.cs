@@ -90,6 +90,18 @@ namespace Note.Core.Services
             return book;
         }
 
+        public async Task<Book> FindAsync(string slug)
+        {
+            var book = await _unitOfWork.BookRepository.FindAsync(slug) ?? throw new NotFoundException(nameof(Book), slug);
+
+            if (!_auth.CanRead(book))
+            {
+                throw new NotAllowedException(_auth.Login, nameof(Book), slug);
+            }
+
+            return book;
+        }
+
         public async Task DeleteAsync(Guid id)
         {
             var book = await _unitOfWork.BookRepository.FindAsync(id) ?? throw new NotFoundException(nameof(Book), id);

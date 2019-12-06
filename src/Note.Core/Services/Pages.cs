@@ -31,6 +31,18 @@ namespace Note.Core.Services
             return page;
         }
 
+        public async Task<Page> FindAsync(string slug)
+        {
+            var page = await _unitOfWork.PageRepository.FindAsync(slug) ?? throw new NotFoundException(nameof(Page), slug);
+
+            if (!_auth.CanRead(page))
+            {
+                throw new NotAllowedException(_auth.Login, nameof(Book), slug);
+            }
+
+            return page;
+        }
+
         public async Task<Page> CreateAsync(CreatePageCommand cmd)
         {
             if (!cmd.IsValid)

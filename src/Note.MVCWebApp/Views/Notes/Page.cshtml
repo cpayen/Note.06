@@ -1,0 +1,26 @@
+﻿@model Note.Core.Entities.Page
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Notes" asp-action="Index">Notes</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Notes" asp-action="Book" asp-route-bookSlug="@Model.Book.Slug">@Model.Book.Title</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
+    </ol>
+</nav>
+
+<h1>@Model.Title</h1>
+
+<section>
+    Created @Model.CreatedAt.ToShortDateString() by @Model.Owner.FullName |
+    @if (Model.UpdatedAt.HasValue)
+    {
+        <text>Updated @Model.UpdatedAt.Value.ToShortDateString() | </text>
+    }
+    <a asp-controller="Pages" asp-action="Edit" asp-route-bookId="@Model.Book.Id" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-controller="Pages" asp-action="Delete" asp-route-bookId="@Model.Book.Id" asp-route-id="@Model.Id">Delete</a>
+</section>
