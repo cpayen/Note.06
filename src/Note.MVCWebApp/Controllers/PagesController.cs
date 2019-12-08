@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Note.Core.Enums;
 using Note.Core.Services;
 using Note.Core.Services.Commands;
-using Note.MVCWebApp.Models.Page;
+using Note.MVCWebApp.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace Note.MVCWebApp.Controllers
 {
     [Authorize]
-    [Route("books/{bookId}/pages")]
+    [Route("pages")]
     public class PagesController : Controller
     {
         protected readonly Pages _pages;
@@ -25,27 +23,9 @@ namespace Note.MVCWebApp.Controllers
             _logger = logger;
         }
 
-        [AllowAnonymous]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> DetailsAsync(Guid bookId, Guid id)
-        {
-            var model = await _pages.FindAsync(id);
-            return View(model);
-        }
-
-        [HttpGet("create")]
-        public IActionResult Create(Guid bookId)
-        {
-            return View(new CreatePageViewModel
-            {
-                BookId = bookId,
-                PublicRead = true
-            });
-        }
-
         [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAsync(Guid bookId, CreatePageViewModel vm)
+        public async Task<IActionResult> CreateAsync(PageFormViewModel vm)
         {
             if (!ModelState.IsValid)
             {
@@ -62,7 +42,7 @@ namespace Note.MVCWebApp.Controllers
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));
 
-                return RedirectToAction("Details", new { bookId = page.Book.Id, id = page.Id });
+                return RedirectToAction("Page", "Notes", new { bookSlug = page.Book.Slug, pageSlug = page.Slug });
             }
             catch (Exception ex)
             {
@@ -72,24 +52,9 @@ namespace Note.MVCWebApp.Controllers
             }
         }
 
-        [HttpGet("{id}/edit")]
-        public async Task<IActionResult> EditAsync(Guid bookId, Guid id)
-        {
-            var page = await _pages.FindAsync(id);
-            var model = new UpdatePageViewModel
-            {
-                Id = page.Id,
-                Title = page.Title,
-                Slug = page.Slug,
-                PublicRead = page.ReadAccess == Access.Public,
-                PublicWrite = page.WriteAccess == Access.Public
-            };
-            return View(model);
-        }
-
         [HttpPost("{id}/edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAsync(Guid bookId, Guid id, UpdatePageViewModel vm)
+        public async Task<IActionResult> EditAsync(Guid id, PageFormViewModel vm)
         {
             if (!ModelState.IsValid)
             {
@@ -106,7 +71,7 @@ namespace Note.MVCWebApp.Controllers
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));
 
-                return RedirectToAction("Details", new { bookId = bookId, id = page.Id });
+                return RedirectToAction("Page", "Notes", new { bookSlug = page.Book.Slug, pageSlug = page.Slug });
             }
             catch (Exception ex)
             {
@@ -116,21 +81,14 @@ namespace Note.MVCWebApp.Controllers
             }
         }
 
-        [HttpGet("{id}/delete")]
-        public async Task<IActionResult> DeleteAsync(Guid bookId, Guid id)
-        {
-            var model = await _pages.FindAsync(id);
-            return View(model);
-        }
-
         [HttpPost("{id}/delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExecDeleteAsync(Guid bookId, Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
             try
             {
-                await _pages.DeleteAsync(id);
-                return RedirectToAction("Details", "Books", new { id = bookId });
+                var page = await _pages.DeleteAsync(id);
+                return RedirectToAction("Book", "Notes", new { bookSlug = page.Book.Slug });
             }
             catch (Exception ex)
             {

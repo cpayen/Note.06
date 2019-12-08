@@ -105,7 +105,7 @@ namespace Note.Core.Services
             return page;
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<Page> DeleteAsync(Guid id)
         {
             var page = await _unitOfWork.PageRepository.FindAsync(id) ?? throw new NotFoundException(nameof(Page), id);
 
@@ -116,6 +116,8 @@ namespace Note.Core.Services
 
             _unitOfWork.PageRepository.Delete(id);
             await _unitOfWork.SaveAsync();
+
+            return page;
         }
     }
 }

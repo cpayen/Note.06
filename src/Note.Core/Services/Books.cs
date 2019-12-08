@@ -102,7 +102,7 @@ namespace Note.Core.Services
             return book;
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<Book> DeleteAsync(Guid id)
         {
             var book = await _unitOfWork.BookRepository.FindAsync(id) ?? throw new NotFoundException(nameof(Book), id);
 
@@ -113,6 +113,8 @@ namespace Note.Core.Services
 
             _unitOfWork.BookRepository.Delete(id);
             await _unitOfWork.SaveAsync();
+
+            return book;
         }
     }
 }

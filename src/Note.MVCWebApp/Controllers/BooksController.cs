@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Note.Core.Enums;
 using Note.Core.Services;
 using Note.Core.Services.Commands;
-using Note.MVCWebApp.Models.Book;
+using Note.MVCWebApp.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -23,34 +23,9 @@ namespace Note.MVCWebApp.Controllers
             _logger = logger;
         }
 
-        [AllowAnonymous]
-        [HttpGet()]
-        public async Task<IActionResult> IndexAsync()
-        {
-            var model = await _books.GetAllAsync();
-            return View(model);
-        }
-
-        [AllowAnonymous]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> DetailsAsync(Guid id)
-        {
-            var model = await _books.FindAsync(id);
-            return View(model);
-        }
-
-        [HttpGet("create")]
-        public IActionResult Create()
-        {
-            return View(new CreateBookViewModel
-            {
-                PublicRead = true
-            });
-        }
-
         [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAsync(CreateBookViewModel vm)
+        public async Task<IActionResult> CreateAsync(BookFormViewModel vm)
         {
             if (!ModelState.IsValid)
             {
@@ -67,7 +42,7 @@ namespace Note.MVCWebApp.Controllers
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));
 
-                return RedirectToAction("Details", new { id = book.Id });
+                return RedirectToAction("Book", "Notes", new { bookSlug = book.Slug });
             }
             catch (Exception ex)
             {
@@ -77,25 +52,9 @@ namespace Note.MVCWebApp.Controllers
             }
         }
 
-        [HttpGet("{id}/edit")]
-        public async Task<IActionResult> EditAsync(Guid id)
-        {
-            var book = await _books.FindAsync(id);
-            var model = new UpdateBookViewModel
-            {
-                Id = book.Id,
-                Title = book.Title,
-                Slug = book.Slug,
-                Description = book.Description,
-                PublicRead = book.ReadAccess == Access.Public,
-                PublicWrite = book.WriteAccess == Access.Public
-            };
-            return View(model);
-        }
-
         [HttpPost("{id}/edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAsync(Guid id, UpdateBookViewModel vm)
+        public async Task<IActionResult> EditAsync(Guid id, BookFormViewModel vm)
         {
             if (!ModelState.IsValid)
             {
@@ -113,7 +72,7 @@ namespace Note.MVCWebApp.Controllers
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));
 
-                return RedirectToAction("Details", new { id = book.Id });
+                return RedirectToAction("Book", "Notes", new { bookSlug = book.Slug });
             }
             catch (Exception ex)
             {
@@ -123,21 +82,14 @@ namespace Note.MVCWebApp.Controllers
             }
         }
 
-        [HttpGet("{id}/delete")]
-        public async Task<IActionResult> DeleteAsync(Guid id)
-        {
-            var model = await _books.FindAsync(id);
-            return View(model);
-        }
-
         [HttpPost("{id}/delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExecDeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
             try
             {
-                await _books.DeleteAsync(id);
-                return RedirectToAction("Index");
+                var book = await _books.DeleteAsync(id);
+                return RedirectToAction("Index", "Notes");
             }
             catch(Exception ex)
             {

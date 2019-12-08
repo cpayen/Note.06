@@ -20,18 +20,88 @@
     {
         <text>Updated @Model.UpdatedAt.Value.ToShortDateString() | </text>
     }
-    <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-controller="Books" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+    <a data-toggle="modal" data-target="#editBookModal">Edit</a> |
+    <a data-toggle="modal" data-target="#deleteBookModal">Delete</a>
 </section>
 
 <h2>Pages</h2>
 
 <section>
     <ul>
-        <li><a asp-controller="Pages" asp-action="Create" asp-route-bookId="@Model.Id">New page</a></li>
+        @if (Auth.IsAuthenticated)
+        {
+            <li><a data-toggle="modal" data-target="#createPageModal">New page</a></li>
+        }
         @foreach (var p in Model.Pages)
         {
             <li><a asp-controller="Notes" asp-action="Page" asp-route-bookSlug="@Model.Slug" asp-route-pageSlug="@p.Slug">@p.Title</a></li>
         }
     </ul>
 </section>
+
+<!-- Edit book modal -->
+<div class="modal fade" id="editBookModal" tabindex="-1" role="dialog" aria-labelledby="editBookModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editBookModalLabel">Edit book</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <partial name="_BookForm" model="@new BookFormViewModel(Model);" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="bookForm">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete book modal -->
+<div class="modal fade" id="deleteBookModal" tabindex="-1" role="dialog" aria-labelledby="deleteBookModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteBookModalLabel">Delete book</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-controller="Books" asp-action="Delete" asp-route-id="@Model.Id" id="deleteBookForm">
+                    <div class="alert alert-danger" role="alert">
+                        Do you really want to delete this book?
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger" form="deleteBookForm">Delete book</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create page modal -->
+<div class="modal fade" id="createPageModal" tabindex="-1" role="dialog" aria-labelledby="createPageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createPageModalLabel">Create page</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <partial name="_PageForm" model="@new PageFormViewModel() { BookId = Model.Id, PublicRead = true };" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="pageForm">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
