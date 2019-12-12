@@ -21,52 +21,11 @@
     {
         <text>Updated @Model.UpdatedAt.Value.ToShortDateString() | </text>
     }
-    <a data-toggle="modal" data-target="#editPageModal">Edit</a> |
-    <a data-toggle="modal" data-target="#deletePageModal">Delete</a>
+    @if (Auth.CanWrite(Model))
+    {
+        <span>
+            <a class="ajax-modal-form-trigger" data-url="@Url.Action("Edit", "ManagePages", new { id = Model.Id })" data-title="Edit page">Edit</a> |
+            <a class="ajax-modal-form-trigger" data-url="@Url.Action("Delete", "ManagePages", new { id = Model.Id })" data-title="Delete page">Delete</a>
+        </span>
+    }
 </section>
-
-<!-- Edit page modal -->
-<div class="modal fade" id="editPageModal" tabindex="-1" role="dialog" aria-labelledby="editPageModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editPageModalLabel">Edit book</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <partial name="_PageForm" model="@new PageFormViewModel(Model);" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" form="pageForm">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Delete page modal -->
-<div class="modal fade" id="deletePageModal" tabindex="-1" role="dialog" aria-labelledby="deletePageModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deletePageModalLabel">Edit book</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="post" asp-controller="Pages" asp-action="Delete" asp-route-id="@Model.Id" id="deletePageForm">
-                    <div class="alert alert-danger" role="alert">
-                        Do you really want to delete this page?
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-danger" form="deletePageForm">Delete page</button>
-            </div>
-        </div>
-    </div>
-</div>

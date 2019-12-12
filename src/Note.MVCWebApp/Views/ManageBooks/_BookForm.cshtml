@@ -1,6 +1,6 @@
 ﻿@model Note.MVCWebApp.Models.BookFormViewModel
 
-<form method="post" asp-controller="Books" asp-action="@Model.FormAction" asp-route-id="@Model.FormRouteId" id="bookForm">
+<form method="post" asp-controller="ManageBooks" asp-action="@Model.FormAction" asp-route-id="@Model.FormRouteId" id="bookForm">
     <div class="form-group">
         <label asp-for="@Model.Title">Title</label>
         <input asp-for="@Model.Title" class="form-control" />

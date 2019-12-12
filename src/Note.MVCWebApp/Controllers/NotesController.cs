@@ -13,9 +13,9 @@ namespace Note.MVCWebApp.Controllers
     {
         protected readonly Books _books;
         protected readonly Pages _pages;
-        protected readonly ILogger<BooksController> _logger;
+        protected readonly ILogger<ManageBooksController> _logger;
 
-        public NotesController(Books books, Pages pages, ILogger<BooksController> logger)
+        public NotesController(Books books, Pages pages, ILogger<ManageBooksController> logger)
         {
             _books = books;
             _pages = pages;

@@ -1,0 +1,7 @@
+﻿@model Note.Core.Entities.Book
+
+<form method="post" asp-controller="ManageBooks" asp-action="Delete" asp-route-id="@Model.Id" id="deleteBookForm">
+    <div class="alert alert-danger" role="alert">
+        Do you really want to delete this book?
+    </div>
+</form>

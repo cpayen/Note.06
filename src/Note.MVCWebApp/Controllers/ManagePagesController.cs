@@ -11,25 +11,36 @@ using System.Threading.Tasks;
 namespace Note.MVCWebApp.Controllers
 {
     [Authorize]
-    [Route("pages")]
-    public class PagesController : Controller
+    [Route("manage/pages")]
+    public class ManagePagesController : Controller
     {
         protected readonly Pages _pages;
-        protected readonly ILogger<PagesController> _logger;
+        protected readonly ILogger<ManagePagesController> _logger;
 
-        public PagesController(Pages pages, ILogger<PagesController> logger)
+        public ManagePagesController(Pages pages, ILogger<ManagePagesController> logger)
         {
             _pages = pages;
             _logger = logger;
         }
 
-        [HttpPost("create")]
+        [HttpGet("create"), ActionName("Create")]
+        public IActionResult GetCreate(Guid bookId)
+        {
+            return PartialView("_PageForm", new PageFormViewModel
+            {
+                BookId = bookId,
+                PublicRead = true
+            });
+        }
+
+        [HttpPost("create"), ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAsync(PageFormViewModel vm)
+        public async Task<IActionResult> PostCreateAsync(PageFormViewModel vm)
         {
             if (!ModelState.IsValid)
             {
-                return View(vm);
+                //TODO: ViewBag error
+                return BackWithError(null, null);
             }
 
             try
@@ -48,17 +59,26 @@ namespace Note.MVCWebApp.Controllers
             {
                 //TODO: Gérer les exceptions argument etc.
                 _logger.LogError(ex, ex.Message);
-                return View();
+                //TODO: ViewBag error
+                return BackWithError(null, null);
             }
         }
 
-        [HttpPost("{id}/edit")]
+        [HttpGet("{id}/edit"), ActionName("Edit")]
+        public async Task<IActionResult> GetEditAsync(Guid id)
+        {
+            var page = await _pages.FindAsync(id);
+            return PartialView("_PageForm", new PageFormViewModel(page));
+        }
+
+        [HttpPost("{id}/edit"), ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAsync(Guid id, PageFormViewModel vm)
+        public async Task<IActionResult> PostEditAsync(Guid id, PageFormViewModel vm)
         {
             if (!ModelState.IsValid)
             {
-                return View(vm);
+                //TODO: ViewBag error
+                return BackWithError(null, null);
             }
 
             try
@@ -77,13 +97,21 @@ namespace Note.MVCWebApp.Controllers
             {
                 //TODO: Gérer les exceptions argument etc.
                 _logger.LogError(ex, "Error");
-                return View();
+                //TODO: ViewBag error
+                return BackWithError(null, null);
             }
         }
 
-        [HttpPost("{id}/delete")]
+        [HttpGet("{id}/delete"), ActionName("delete")]
+        public async Task<IActionResult> GetDeleteAsync(Guid id)
+        {
+            var model = await _pages.FindAsync(id);
+            return PartialView("_DeletePageForm", model);
+        }
+
+        [HttpPost("{id}/delete"), ActionName("delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public async Task<IActionResult> PostDeleteAsync(Guid id)
         {
             try
             {
@@ -93,8 +121,15 @@ namespace Note.MVCWebApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return View();
+                //TODO: ViewBag error
+                return BackWithError(null, null);
             }
+        }
+
+        private IActionResult BackWithError(string errorTitle, string errorMessage)
+        {
+            //TODO: ViewBag error
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 }

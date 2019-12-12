@@ -20,17 +20,22 @@
     {
         <text>Updated @Model.UpdatedAt.Value.ToShortDateString() | </text>
     }
-    <a data-toggle="modal" data-target="#editBookModal">Edit</a> |
-    <a data-toggle="modal" data-target="#deleteBookModal">Delete</a>
+    @if(Auth.CanWrite(Model))
+    {
+        <span>
+            <a class="ajax-modal-form-trigger" data-url="@Url.Action("Edit", "ManageBooks", new { id = Model.Id })" data-title="Edit book">Edit</a> | 
+            <a class="ajax-modal-form-trigger" data-url="@Url.Action("Delete", "ManageBooks", new { id = Model.Id })" data-title="Delete book">Delete</a>
+        </span>
+    }
 </section>
 
 <h2>Pages</h2>
 
 <section>
     <ul>
-        @if (Auth.IsAuthenticated)
+        @if (Auth.CanWrite(Model))
         {
-            <li><a data-toggle="modal" data-target="#createPageModal">New page</a></li>
+            <li><a class="ajax-modal-form-trigger" data-url="@Url.Action("Create", "ManagePages", new { bookId = Model.Id })" data-title="New page">New...</a></li>
         }
         @foreach (var p in Model.Pages)
         {
@@ -38,70 +43,3 @@
         }
     </ul>
 </section>
-
-<!-- Edit book modal -->
-<div class="modal fade" id="editBookModal" tabindex="-1" role="dialog" aria-labelledby="editBookModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editBookModalLabel">Edit book</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <partial name="_BookForm" model="@new BookFormViewModel(Model);" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" form="bookForm">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Delete book modal -->
-<div class="modal fade" id="deleteBookModal" tabindex="-1" role="dialog" aria-labelledby="deleteBookModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteBookModalLabel">Delete book</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="post" asp-controller="Books" asp-action="Delete" asp-route-id="@Model.Id" id="deleteBookForm">
-                    <div class="alert alert-danger" role="alert">
-                        Do you really want to delete this book?
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-danger" form="deleteBookForm">Delete book</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Create page modal -->
-<div class="modal fade" id="createPageModal" tabindex="-1" role="dialog" aria-labelledby="createPageModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="createPageModalLabel">Create page</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <partial name="_PageForm" model="@new PageFormViewModel() { BookId = Model.Id, PublicRead = true };" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" form="pageForm">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>

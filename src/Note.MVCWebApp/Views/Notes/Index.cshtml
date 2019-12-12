@@ -19,7 +19,7 @@
         @if (Auth.IsAuthenticated)
         {
             <li>
-                <a data-toggle="modal" data-target="#createModal">New...</a><br />
+                <a class="ajax-modal-form-trigger" data-url="@Url.Action("Create", "ManageBooks")" data-title="New book">New...</a><br />
             </li>
         }
         @foreach (var book in Model)
@@ -30,24 +30,3 @@
         }
     </ul>
 </section>
-
-<!-- Create modal -->
-<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="createModalLabel">New book</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <partial name="_BookForm" model="@new BookFormViewModel() { PublicRead = true };" view-data="ViewData" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" form="bookForm">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>

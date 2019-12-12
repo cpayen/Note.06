@@ -1,6 +1,6 @@
 ﻿@model Note.MVCWebApp.Models.PageFormViewModel
 
-<form method="post" asp-controller="Pages" asp-action="@Model.FormAction" asp-route-id="@Model.FormRouteId" id="pageForm">
+<form method="post" asp-controller="ManagePages" asp-action="@Model.FormAction" asp-route-id="@Model.FormRouteId" id="pageForm">
     <input type="hidden" asp-for="@Model.BookId" />
     <div class="form-group">
         <label asp-for="@Model.Title">Title</label>

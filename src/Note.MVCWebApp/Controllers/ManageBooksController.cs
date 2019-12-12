@@ -11,25 +11,35 @@ using System.Threading.Tasks;
 namespace Note.MVCWebApp.Controllers
 {
     [Authorize]
-    [Route("books")]
-    public class BooksController : Controller
+    [Route("manage/books")]
+    public class ManageBooksController : Controller
     {
         protected readonly Books _books;
-        protected readonly ILogger<BooksController> _logger;
+        protected readonly ILogger<ManageBooksController> _logger;
 
-        public BooksController(Books books, ILogger<BooksController> logger)
+        public ManageBooksController(Books books, ILogger<ManageBooksController> logger)
         {
             _books = books;
             _logger = logger;
         }
 
-        [HttpPost("create")]
+        [HttpGet("create"), ActionName("Create")]
+        public IActionResult GetCreate()
+        {
+            return PartialView("_BookForm", new BookFormViewModel
+            {
+                PublicRead = true
+            });
+        }
+
+        [HttpPost("create"), ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAsync(BookFormViewModel vm)
+        public async Task<IActionResult> PostCreateAsync(BookFormViewModel vm)
         {
             if (!ModelState.IsValid)
             {
-                return View(vm);
+                //TODO: ViewBag error
+                return BackWithError(null, null);
             }
 
             try
@@ -41,24 +51,33 @@ namespace Note.MVCWebApp.Controllers
                         vm.Description,
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));
-
+                
                 return RedirectToAction("Book", "Notes", new { bookSlug = book.Slug });
             }
             catch (Exception ex)
             {
                 //TODO: Gérer les exceptions argument etc.
                 _logger.LogError(ex, ex.Message);
-                return View();
+                //TODO: ViewBag error
+                return BackWithError(null, null);
             }
         }
 
-        [HttpPost("{id}/edit")]
+        [HttpGet("{id}/edit"), ActionName("Edit")]
+        public async Task<IActionResult> GetEditAsync(Guid id)
+        {
+            var book = await _books.FindAsync(id);
+            return PartialView("_BookForm", new BookFormViewModel(book));
+        }
+
+        [HttpPost("{id}/edit"), ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAsync(Guid id, BookFormViewModel vm)
+        public async Task<IActionResult> PostEditAsync(Guid id, BookFormViewModel vm)
         {
             if (!ModelState.IsValid)
             {
-                return View(vm);
+                //TODO: ViewBag error
+                return BackWithError(null, null);
             }
 
             try
@@ -78,13 +97,21 @@ namespace Note.MVCWebApp.Controllers
             {
                 //TODO: Gérer les exceptions argument etc.
                 _logger.LogError(ex, "Error");
-                return View();
+                //TODO: ViewBag error
+                return BackWithError(null, null);
             }
         }
 
-        [HttpPost("{id}/delete")]
+        [HttpGet("{id}/delete"), ActionName("delete")]
+        public async Task<IActionResult> GetDeleteAsync(Guid id)
+        {
+            var model = await _books.FindAsync(id);
+            return PartialView("_DeleteBookForm", model);
+        }
+
+        [HttpPost("{id}/delete"), ActionName("delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public async Task<IActionResult> PostDeleteAsync(Guid id)
         {
             try
             {
@@ -94,8 +121,15 @@ namespace Note.MVCWebApp.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return View();
+                //TODO: ViewBag error
+                return BackWithError(null, null);
             }
+        }
+
+        private IActionResult BackWithError(string errorTitle, string errorMessage)
+        {
+            //TODO: ViewBag error
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 }

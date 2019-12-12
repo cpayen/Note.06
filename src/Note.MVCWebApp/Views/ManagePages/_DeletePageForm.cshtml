@@ -1,0 +1,7 @@
+﻿@model Note.Core.Entities.Page
+
+<form method="post" asp-controller="ManagePages" asp-action="Delete" asp-route-id="@Model.Id" id="deletePageForm">
+    <div class="alert alert-danger" role="alert">
+        Do you really want to delete this page?
+    </div>
+</form>
