@@ -14,16 +14,18 @@
 
 <h1>@Model.Title</h1>
 
+<partial name="_DisplayTempDataErrorsPartial" />
+
 <section>
     Created @Model.CreatedAt.ToShortDateString() by @Model.Owner.FullName |
     @if (Model.UpdatedAt.HasValue)
     {
         <text>Updated @Model.UpdatedAt.Value.ToShortDateString() | </text>
     }
-    @if(Auth.CanWrite(Model))
+    @if (Auth.CanWrite(Model))
     {
         <span>
-            <a class="ajax-modal-form-trigger" data-url="@Url.Action("Edit", "ManageBooks", new { id = Model.Id })" data-title="Edit book">Edit</a> | 
+            <a class="ajax-modal-form-trigger" data-url="@Url.Action("Edit", "ManageBooks", new { id = Model.Id })" data-title="Edit book">Edit</a> |
             <a class="ajax-modal-form-trigger" data-url="@Url.Action("Delete", "ManageBooks", new { id = Model.Id })" data-title="Delete book">Delete</a>
         </span>
     }

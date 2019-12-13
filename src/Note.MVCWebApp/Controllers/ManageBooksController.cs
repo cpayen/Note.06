@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Note.Core.Enums;
 using Note.Core.Services;
 using Note.Core.Services.Commands;
+using Note.MVCWebApp.Controllers.Base;
 using Note.MVCWebApp.Models;
 using System;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace Note.MVCWebApp.Controllers
 {
     [Authorize]
     [Route("manage/books")]
-    public class ManageBooksController : Controller
+    public class ManageBooksController : ManageController
     {
         protected readonly Books _books;
         protected readonly ILogger<ManageBooksController> _logger;
@@ -38,8 +39,7 @@ namespace Note.MVCWebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                //TODO: ViewBag error
-                return BackWithError(null, null);
+                return BackWithError("Error", "An error occurred while processing your request.");
             }
 
             try
@@ -56,10 +56,8 @@ namespace Note.MVCWebApp.Controllers
             }
             catch (Exception ex)
             {
-                //TODO: Gérer les exceptions argument etc.
                 _logger.LogError(ex, ex.Message);
-                //TODO: ViewBag error
-                return BackWithError(null, null);
+                return BackWithError("Error", "An error occurred while processing your request.");
             }
         }
 
@@ -76,8 +74,7 @@ namespace Note.MVCWebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                //TODO: ViewBag error
-                return BackWithError(null, null);
+                return BackWithError("Error", "An error occurred while processing your request.");
             }
 
             try
@@ -95,10 +92,8 @@ namespace Note.MVCWebApp.Controllers
             }
             catch (Exception ex)
             {
-                //TODO: Gérer les exceptions argument etc.
                 _logger.LogError(ex, "Error");
-                //TODO: ViewBag error
-                return BackWithError(null, null);
+                return BackWithError("Error", "An error occurred while processing your request.");
             }
         }
 
@@ -121,15 +116,8 @@ namespace Note.MVCWebApp.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                //TODO: ViewBag error
-                return BackWithError(null, null);
+                return BackWithError("Error", "An error occurred while processing your request.");
             }
-        }
-
-        private IActionResult BackWithError(string errorTitle, string errorMessage)
-        {
-            //TODO: ViewBag error
-            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 }

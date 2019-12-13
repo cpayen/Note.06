@@ -1,0 +1,7 @@
+﻿@if ((bool?)TempData["HasError"] ?? false)
+{
+    <div class="alert alert-danger">
+        <strong>@TempData["ErrorTitle"]</strong>
+        <span>@TempData["ErrorMessage"]</span>
+    </div>
+}

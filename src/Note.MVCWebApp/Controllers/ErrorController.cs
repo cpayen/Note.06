@@ -53,9 +53,7 @@ namespace Note.MVCWebApp.Controllers
                 _logger.LogError(exceptionFeature.Error, exceptionFeature.Error.Message);
             }
 
-            //    return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
             Response.StatusCode = status;
-            //return Content($"Result is {status}");
             return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

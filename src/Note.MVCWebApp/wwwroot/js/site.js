@@ -10,6 +10,7 @@ $('document').ready(function () {
                 $('#formModal .modal-title').text($this.data('title'));
                 $('#formModal .modal-body').html(result);
                 $('#formModal [type="submit"]').attr('form', $('#formModal form').attr('id'));
+                $.validator.unobtrusive.parse($('#formModal form'));
                 $('#formModal').modal('show');
             })
             .fail(function (erro) {
