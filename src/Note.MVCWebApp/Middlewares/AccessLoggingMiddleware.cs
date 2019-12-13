@@ -38,8 +38,9 @@ namespace Note.MVCWebApp.Middlewares
             {
                 case (int)HttpStatusCode.OK:
                 case (int)HttpStatusCode.Created:
-                case (int)HttpStatusCode.NoContent:
                 case (int)HttpStatusCode.Found:
+                case (int)HttpStatusCode.NotModified:
+                case (int)HttpStatusCode.NoContent:
                     logger.LogInformation(log);
                     break;
 
