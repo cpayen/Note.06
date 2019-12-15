@@ -1,0 +1,13 @@
+﻿@model Note.MVCWebApp.Models.PageContentFormViewModel
+
+<form method="post" asp-controller="ManagePages" asp-action="@Model.FormAction" asp-route-id="@Model.FormRouteId" id="writePageForm">
+    <div class="form-group">
+        <label asp-for="@Model.Content">Description</label>
+        <textarea asp-for="@Model.Content" class="form-control"></textarea>
+    </div>
+</form>
+
+<script>
+    var easyMDE = new EasyMDE();
+</script>
+

@@ -99,14 +99,14 @@ namespace Note.MVCWebApp.Controllers
             }
         }
 
-        [HttpGet("{id}/delete"), ActionName("delete")]
+        [HttpGet("{id}/delete"), ActionName("Delete")]
         public async Task<IActionResult> GetDeleteAsync(Guid id)
         {
             var model = await _pages.FindAsync(id);
             return PartialView("_DeletePageForm", model);
         }
 
-        [HttpPost("{id}/delete"), ActionName("delete")]
+        [HttpPost("{id}/delete"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PostDeleteAsync(Guid id)
         {
@@ -118,6 +118,38 @@ namespace Note.MVCWebApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
+                return BackWithError("Error", "An error occurred while processing your request.");
+            }
+        }
+
+        [HttpGet("{id}/write"), ActionName("Write")]
+        public async Task<IActionResult> GetWriteAsync(Guid id)
+        {
+            var model = await _pages.FindAsync(id);
+            return PartialView("_WritePageForm", new PageContentFormViewModel(model));
+        }
+
+        [HttpPost("{id}/write"), ActionName("Write")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PostWriteAsync(Guid id, PageContentFormViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BackWithError("Error", "An error occurred while processing your request.");
+            }
+
+            try
+            {
+                var page = await _pages.UpdateContentAsync(
+                    new UpdatePageContentCommand(
+                        id,
+                        vm.Content));
+
+                return RedirectToAction("Page", "Notes", new { bookSlug = page.Book.Slug, pageSlug = page.Slug });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error");
                 return BackWithError("Error", "An error occurred while processing your request.");
             }
         }

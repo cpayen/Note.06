@@ -118,6 +118,29 @@ namespace Note.Core.Services
             return page;
         }
 
+        public async Task<Page> UpdateContentAsync(UpdatePageContentCommand cmd)
+        {
+            if (!cmd.IsValid)
+            {
+                throw new InvalidCommandException(nameof(UpdatePageContentCommand), cmd);
+            }
+
+            var page = await _unitOfWork.PageRepository.FindAsync(cmd.Id) ?? throw new NotFoundException(nameof(Page), cmd.Id);
+
+            if (!_auth.CanWrite(page))
+            {
+                throw new NotAllowedException(_auth.Login, nameof(Page), cmd.Id);
+            }
+
+            page.Content = cmd.Content;
+            page.UpdatedAt = DateTime.Now;
+
+            _unitOfWork.PageRepository.Update(page);
+            await _unitOfWork.SaveAsync();
+
+            return page;
+        }
+
         public async Task<Page> DeleteAsync(Guid id)
         {
             var page = await _unitOfWork.PageRepository.FindAsync(id) ?? throw new NotFoundException(nameof(Page), id);
