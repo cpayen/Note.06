@@ -60,6 +60,13 @@ namespace Note.Infra.Data.SqlServer.Repositories
                 .ToListAsync();
         }
 
+        public async Task<ICollection<Page>> FindByAsync(Expression<Func<Page, bool>> predicate)
+        {
+            return await PageWithDependingEntities()
+                .Where(predicate)
+                .ToListAsync();
+        }
+
         public async Task<ICollection<Page>> GetAllAsync(string login, bool isAdmin = false)
         {
             return await AllowedPages(login, isAdmin).ToListAsync();

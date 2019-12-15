@@ -4,20 +4,31 @@ using Note.Core.Exceptions;
 using Note.Core.Identity;
 using Note.Core.Services.Commands;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Note.Core.Services
 {
     public class Pages
     {
+        #region Props
+
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly IAuth _auth;
+
+        #endregion
+
+        #region Ctor
 
         public Pages(IUnitOfWork unitOfWork, IAuth auth)
         {
             _unitOfWork = unitOfWork;
             _auth = auth;
         }
+
+        #endregion
+
+        #region CRUD
 
         public async Task<Page> FindAsync(Guid id)
         {
@@ -121,5 +132,17 @@ namespace Note.Core.Services
 
             return page;
         }
+
+        #endregion
+
+        #region Utils
+
+        public async Task<bool> CheckSlugUnicityAsync(string slug, Guid bookId)
+        {
+            var exists = await _unitOfWork.PageRepository.FindByAsync(o => o.Book.Id == bookId && o.Slug == slug);
+            return exists.Any() ? false : true;
+        }
+
+        #endregion
     }
 }

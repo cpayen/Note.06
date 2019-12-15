@@ -10,6 +10,7 @@ namespace Note.Core.Data.Repositories
     {
         Task<ICollection<Book>> GetAllAsync(string login, bool isAdmin = false);
         Task<ICollection<Book>> FindByAsync(Expression<Func<Book, bool>> predicate, string login, bool isAdmin = false);
+        Task<ICollection<Book>> FindByAsync(Expression<Func<Book, bool>> predicate);
         Task<Book> FindAsync(Guid id);
         Task<Book> FindAsync(string slug);
         Book Create(Book book);

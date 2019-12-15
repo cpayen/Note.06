@@ -59,6 +59,13 @@ namespace Note.Infra.Data.SqlServer.Repositories
                 .ToListAsync();
         }
 
+        public async Task<ICollection<Book>> FindByAsync(Expression<Func<Book, bool>> predicate)
+        {
+            return await BookWithDependingEntities()
+                .Where(predicate)
+                .ToListAsync();
+        }
+
         public async Task<ICollection<Book>> GetAllAsync(string login, bool isAdmin = false)
         {
             return await AllowedBooks(login, isAdmin).ToListAsync();
