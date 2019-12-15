@@ -17,6 +17,7 @@ namespace Note.MVCWebApp.Models
         [Required(AllowEmptyStrings = false), MaxLength(100), RegularExpression(@"^(?i)[a-z0-9]+(?:-[a-z0-9]+)*$")]
         public string Slug { get; set; }
         public string Description { get; set; }
+        public bool Published { get; set; }
         public bool PublicRead { get; set; }
         public bool PublicWrite { get; set; }
 
@@ -35,8 +36,9 @@ namespace Note.MVCWebApp.Models
             Title = page.Title;
             Slug = page.Slug;
             Description = page.Description;
-            PublicRead = page.ReadAccess == Access.Public ? true : false;
-            PublicWrite = page.WriteAccess == Access.Public ? true : false;
+            Published = page.State == State.Published;
+            PublicRead = page.ReadAccess == Access.Public;
+            PublicWrite = page.WriteAccess == Access.Public;
         }
     }
 }

@@ -67,6 +67,7 @@ namespace Note.Core.Services
                 Book = book,
                 Title = cmd.Title,
                 Slug = cmd.Slug,
+                State = cmd.State,
                 ReadAccess = cmd.ReadAccess,
                 WriteAccess = cmd.WriteAccess,
                 Owner = await _auth.GetCurrentUserEntityAsync(),
@@ -95,6 +96,7 @@ namespace Note.Core.Services
 
             page.Title = cmd.Title;
             page.Slug = cmd.Slug;
+            page.State = cmd.State;
             page.ReadAccess = cmd.ReadAccess;
             page.WriteAccess = cmd.WriteAccess;
             page.UpdatedAt = DateTime.Now;

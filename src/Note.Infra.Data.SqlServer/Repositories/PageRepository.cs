@@ -89,7 +89,10 @@ namespace Note.Infra.Data.SqlServer.Repositories
 
         protected IQueryable<Page> AllowedPages(string login, bool isAdmin = false)
         {
-            return PageWithDependingEntities().Where(o => isAdmin || o.ReadAccess == Access.Public || o.Owner.Login == login);
+            return PageWithDependingEntities()
+                .Where(o => 
+                    (isAdmin || o.Owner.Login == login) || 
+                    (o.ReadAccess == Access.Public && o.State == State.Published));
         }
 
         #endregion

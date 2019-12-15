@@ -50,6 +50,7 @@ namespace Note.MVCWebApp.Controllers
                         vm.BookId,
                         vm.Title,
                         vm.Slug,
+                        vm.Published ? State.Published : State.Draft,
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));
 
@@ -85,6 +86,7 @@ namespace Note.MVCWebApp.Controllers
                         id,
                         vm.Title,
                         vm.Slug,
+                        vm.Published ? State.Published : State.Draft,
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));
 
