@@ -35,5 +35,8 @@
 </section>
 
 <main>
-    @Html.Raw(Markdown.ToHtml(Model.Content))
+    @if (!string.IsNullOrEmpty(Model.Content))
+    {
+        <text>@Html.Raw(Markdown.ToHtml(Model.Content))</text>
+    }
 </main>
