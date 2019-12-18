@@ -4,7 +4,7 @@ namespace Note.Core.Helpers
 {
     public static class SlugHelper
     {
-        public const string ValidSludRegex = @"^(?i)[a-z0-9]+(?:-[a-z0-9]+)*$";
+        public const string ValidSludRegex = "^[a-z0-9]+(?:-[a-z0-9]+)*$";
 
         public static bool Validate(string slug)
         {

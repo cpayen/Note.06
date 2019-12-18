@@ -18,7 +18,10 @@ $('document').ready(function () {
                 $('#formModal .modal-title').text($this.data('title'));
                 $('#formModal .modal-body').html(result);
 
-                $('#formModal [type="submit"]').attr('form', $('#formModal form').attr('id'));
+                //$('#formModal [type="submit"]').attr('form', $('#formModal form').attr('id'));
+                $('#formModal [type="submit"]').click(function () {
+                    $('#formModal form').submit();
+                });
                 $.validator.unobtrusive.parse($('#formModal form'));
 
                 $('#formModal').modal('show');
