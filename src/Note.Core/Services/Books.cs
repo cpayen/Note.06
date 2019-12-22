@@ -1,6 +1,7 @@
 ﻿using Note.Core.Data;
 using Note.Core.Entities;
 using Note.Core.Exceptions;
+using Note.Core.Helpers;
 using Note.Core.Identity;
 using Note.Core.Services.Commands;
 using System;
@@ -71,7 +72,7 @@ namespace Note.Core.Services
             var book = new Book
             {
                 Title = cmd.Title,
-                Slug = cmd.Slug,
+                Slug = await GetUniqueSlugAsync(cmd.Slug),
                 Description = cmd.Description,
                 ReadAccess = cmd.ReadAccess,
                 WriteAccess = cmd.WriteAccess,
@@ -100,7 +101,7 @@ namespace Note.Core.Services
             }
 
             book.Title = cmd.Title;
-            book.Slug = cmd.Slug;
+            book.Slug = await GetUniqueSlugAsync(cmd.Slug);
             book.Description = cmd.Description;
             book.ReadAccess = cmd.ReadAccess;
             book.WriteAccess = cmd.WriteAccess;
@@ -131,10 +132,11 @@ namespace Note.Core.Services
 
         #region Utils
 
-        public async Task<bool> CheckSlugUnicityAsync(string slug)
+        public async Task<string> GetUniqueSlugAsync(string slug)
         {
-            var exists = await _unitOfWork.BookRepository.FindByAsync(o => o.Slug == slug);
-            return exists.Any() ? false : true;
+            var booksWithSameSlugs = await _unitOfWork.BookRepository.FindByAsync(o => o.Slug.StartsWith(slug));
+            var existingSlugs = booksWithSameSlugs.Select(o => o.Slug);
+            return SlugHelper.GetUniqueSlug(slug, existingSlugs);
         }
 
         #endregion

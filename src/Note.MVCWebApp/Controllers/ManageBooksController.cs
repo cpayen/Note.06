@@ -51,7 +51,7 @@ namespace Note.MVCWebApp.Controllers
                         vm.Description,
                         vm.PublicRead ? Access.Public : Access.Private,
                         vm.PublicWrite ? Access.Public : Access.Private));
-                
+
                 return RedirectToAction("Book", "Notes", new { bookSlug = book.Slug });
             }
             catch (Exception ex)

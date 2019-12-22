@@ -1,6 +1,7 @@
 ﻿using Note.Core.Data;
 using Note.Core.Entities;
 using Note.Core.Exceptions;
+using Note.Core.Helpers;
 using Note.Core.Identity;
 using Note.Core.Services.Commands;
 using System;
@@ -72,12 +73,12 @@ namespace Note.Core.Services
             {
                 throw new NotAllowedException(_auth.Login, nameof(Book), cmd.BookId);
             }
-
+            
             var page = new Page
             {
                 Book = book,
                 Title = cmd.Title,
-                Slug = cmd.Slug,
+                Slug = await GetUniqueSlugAsync(cmd.Slug, book.Id),
                 State = cmd.State,
                 ReadAccess = cmd.ReadAccess,
                 WriteAccess = cmd.WriteAccess,
@@ -106,7 +107,7 @@ namespace Note.Core.Services
             }
 
             page.Title = cmd.Title;
-            page.Slug = cmd.Slug;
+            page.Slug = await GetUniqueSlugAsync(cmd.Slug, page.Book.Id);
             page.State = cmd.State;
             page.ReadAccess = cmd.ReadAccess;
             page.WriteAccess = cmd.WriteAccess;
@@ -160,10 +161,11 @@ namespace Note.Core.Services
 
         #region Utils
 
-        public async Task<bool> CheckSlugUnicityAsync(string slug, Guid bookId)
+        public async Task<string> GetUniqueSlugAsync(string slug, Guid bookId)
         {
-            var exists = await _unitOfWork.PageRepository.FindByAsync(o => o.Book.Id == bookId && o.Slug == slug);
-            return exists.Any() ? false : true;
+            var pagesWithSameSlugs = await _unitOfWork.PageRepository.FindByAsync(o => o.Book.Id == bookId && o.Slug.StartsWith(slug));
+            var existingSlugs = pagesWithSameSlugs.Select(o => o.Slug);
+            return SlugHelper.GetUniqueSlug(slug, existingSlugs);
         }
 
         #endregion
