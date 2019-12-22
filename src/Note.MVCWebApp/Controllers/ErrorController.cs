@@ -54,7 +54,7 @@ namespace Note.MVCWebApp.Controllers
             }
 
             Response.StatusCode = status;
-            return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View("Error", new ErrorViewModel { Status = status, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
