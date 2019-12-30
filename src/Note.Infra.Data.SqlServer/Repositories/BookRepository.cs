@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Note.Core.Data.Repositories;
 using Note.Core.Entities;
+using Note.Core.Entities.Base;
 using Note.Core.Enums;
 using Note.Infra.Data.SQLServer;
 
@@ -42,33 +43,33 @@ namespace Note.Infra.Data.SqlServer.Repositories
 
         public async Task<Book> FindAsync(Guid id)
         {
-            return await BookWithDependingEntities()
+            return await BooksWithDependingEntities()
                 .SingleOrDefaultAsync(o => o.Id == id);
         }
 
         public async Task<Book> FindAsync(string slug)
         {
-            return await BookWithDependingEntities()
+            return await BooksWithDependingEntities()
                 .SingleOrDefaultAsync(o => o.Slug == slug);
         }
 
         public async Task<ICollection<Book>> FindByAsync(Expression<Func<Book, bool>> predicate, string login, bool isAdmin = false)
         {
-            return await AllowedBooks(login, isAdmin)
+            return await AllowedBooksWithDependingEntities(login, isAdmin)
                 .Where(predicate)
                 .ToListAsync();
         }
 
         public async Task<ICollection<Book>> FindByAsync(Expression<Func<Book, bool>> predicate)
         {
-            return await BookWithDependingEntities()
+            return await BooksWithDependingEntities()
                 .Where(predicate)
                 .ToListAsync();
         }
 
         public async Task<ICollection<Book>> GetAllAsync(string login, bool isAdmin = false)
         {
-            return await AllowedBooks(login, isAdmin).ToListAsync();
+            return await AllowedBooksWithDependingEntities(login, isAdmin).ToListAsync();
         }
 
         public Book Update(Book book)
@@ -84,7 +85,7 @@ namespace Note.Infra.Data.SqlServer.Repositories
 
         #region Utils
 
-        protected IQueryable<Book> BookWithDependingEntities()
+        protected IQueryable<Book> BooksWithDependingEntities()
         {
             return _context
                 .Books
@@ -93,9 +94,18 @@ namespace Note.Infra.Data.SqlServer.Repositories
                     .ThenInclude(o => o.Owner);
         }
 
-        protected IQueryable<Book> AllowedBooks(string login, bool isAdmin = false)
+        protected IQueryable<Book> AllowedBooksWithDependingEntities(string login, bool isAdmin = false)
         {
-            return BookWithDependingEntities().Where(o => isAdmin || o.ReadAccess == Access.Public || o.Owner.Login == login);
+            return _context
+                .Books.Where(o => HasAccess(o, login, isAdmin))
+                .Include(o => o.Owner)
+                .Include(o => o.Pages.Where(p => HasAccess(p, login, isAdmin)))
+                    .ThenInclude(o => o.Owner);
+        }
+
+        protected static bool HasAccess(IOwned target, string login, bool isAdmin = false)
+        {
+            return isAdmin || target.ReadAccess == Access.Public || target.Owner.Login == login;
         }
 
         #endregion
