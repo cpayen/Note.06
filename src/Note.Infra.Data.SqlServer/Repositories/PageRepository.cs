@@ -89,23 +89,40 @@ namespace Note.Infra.Data.SqlServer.Repositories
         {
             return _context
                 .Pages
-                .Include(o => o.Owner)
-                .Include(o => o.Book)
-                    .ThenInclude(o => o.Owner);
+                .Select(o => new Page
+                {
+                    Id = o.Id,
+                    Owner = o.Owner,
+                    Title = o.Title,
+                    Slug = o.Slug,
+                    Description = o.Description,
+                    ReadAccess = o.ReadAccess,
+                    WriteAccess = o.WriteAccess,
+                    CreatedAt = o.CreatedAt,
+                    UpdatedAt = o.UpdatedAt,
+                    State = o.State,
+                    Book = o.Book
+                });
         }
 
         protected IQueryable<Page> AllowedPagesWithDependingEntities(string login, bool isAdmin = false)
         {
             return _context
-                .Pages.Where(o => HasAccess(o, login, isAdmin))
-                .Include(o => o.Owner)
-                .Include(o => o.Book)
-                    .ThenInclude(o => o.Owner);
-        }
-
-        protected static bool HasAccess(IOwned target, string login, bool isAdmin = false)
-        {
-            return isAdmin || target.ReadAccess == Access.Public || target.Owner.Login == login;
+                .Pages.Where(o => isAdmin || o.ReadAccess == Access.Public || o.Owner.Login == login)
+                .Select(o => new Page
+                {
+                    Id = o.Id,
+                    Owner = o.Owner,
+                    Title = o.Title,
+                    Slug = o.Slug,
+                    Description = o.Description,
+                    ReadAccess = o.ReadAccess,
+                    WriteAccess = o.WriteAccess,
+                    CreatedAt = o.CreatedAt,
+                    UpdatedAt = o.UpdatedAt,
+                    State = o.State,
+                    Book = o.Book
+                });
         }
 
         #endregion
