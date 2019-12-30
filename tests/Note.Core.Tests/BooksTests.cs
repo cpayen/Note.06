@@ -52,7 +52,7 @@ namespace Note.Core.Tests
         }
         
         [Fact]
-        public async Task UpdateAsync_ChecResult()
+        public async Task UpdateAsync_CheckResult()
         {
             var title = "Book's title";
             var slug = "books-title";
@@ -60,7 +60,7 @@ namespace Note.Core.Tests
             var readAccess = Access.Private;
             var writreAccess = Access.Private;
 
-            var auth = IAuthMock.GetIOwnedNotAllowed();
+            var auth = IAuthMock.GetIOwnedWriteAllowed();
             var uow = IUnitOfWorkMock.Get(IBookRepositoryMock.GetFindAsync(_book));
             var books = new Books(uow, auth);
             var cmd = new UpdateBookCommand(_book.Id, title, slug, description, readAccess, writreAccess);
@@ -85,7 +85,7 @@ namespace Note.Core.Tests
         [Fact]
         public async Task FindAync_NotAllowed()
         {
-            var auth = IAuthMock.GetIOwnedNotAllowed();
+            var auth = IAuthMock.GetIOwnedReadNotAllowed();
             var uow = IUnitOfWorkMock.Get(IBookRepositoryMock.GetFindAsync(_book));
             var books = new Books(uow, auth);
             await Assert.ThrowsAsync<NotAllowedException>(() => books.FindAsync(new Guid()));
@@ -95,6 +95,7 @@ namespace Note.Core.Tests
         {
             Id = new Guid("8a2109b0-7d55-4fc2-9eb1-57f30ebd6040"),
             Title = "Book 1",
+            Slug = "slug",
             ReadAccess = Access.Public,
             WriteAccess = Access.Public,
         };

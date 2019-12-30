@@ -14,7 +14,14 @@ namespace Note.Core.Tests.Mocks
             return mock.Object;
         }
 
-        public static IAuth GetIOwnedNotAllowed()
+        public static IAuth GetIOwnedWriteAllowed()
+        {
+            var mock = new Mock<IAuth>();
+            mock.Setup(o => o.CanWrite(It.IsAny<IOwned>())).Returns(true);
+            return mock.Object;
+        }
+
+        public static IAuth GetIOwnedReadNotAllowed()
         {
             var mock = new Mock<IAuth>();
             mock.Setup(o => o.CanRead(It.IsAny<IOwned>())).Returns(false);
