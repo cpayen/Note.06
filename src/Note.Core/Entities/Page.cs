@@ -3,7 +3,7 @@ using Note.Core.Enums;
 
 namespace Note.Core.Entities
 {
-    public class Page : Entity, IOwned
+    public class Page : Entity
     {
         #region Props
 
@@ -12,8 +12,6 @@ namespace Note.Core.Entities
         public string Description { get; set; }
         public string Content { get; set; }
         public State State { get; set; }
-        public Access ReadAccess { get; set; }
-        public Access WriteAccess { get; set; }
         public virtual User Owner { get; set; }
         public virtual Book Book { get; set; }
         

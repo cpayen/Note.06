@@ -19,8 +19,6 @@ namespace Note.MVCWebApp.Models
         public string Slug { get; set; }
         public string Description { get; set; }
         public bool Published { get; set; }
-        public bool PublicRead { get; set; }
-        public bool PublicWrite { get; set; }
 
         public PageFormViewModel()
         {
@@ -38,8 +36,6 @@ namespace Note.MVCWebApp.Models
             Slug = page.Slug;
             Description = page.Description;
             Published = page.State == State.Published;
-            PublicRead = page.ReadAccess == Access.Public;
-            PublicWrite = page.WriteAccess == Access.Public;
         }
     }
 }

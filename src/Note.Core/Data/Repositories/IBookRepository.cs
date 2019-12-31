@@ -8,8 +8,8 @@ namespace Note.Core.Data.Repositories
 {
     public interface IBookRepository
     {
-        Task<ICollection<Book>> GetAllAsync(string login, bool isAdmin = false);
-        Task<ICollection<Book>> FindByAsync(Expression<Func<Book, bool>> predicate, string login, bool isAdmin = false);
+        Task<ICollection<Book>> GetAllAllowedAsync(string login, bool isAdmin = false);
+        Task<ICollection<Book>> FindAllowedByAsync(Expression<Func<Book, bool>> predicate, string login, bool isAdmin = false);
         Task<ICollection<Book>> FindByAsync(Expression<Func<Book, bool>> predicate);
         Task<Book> FindAsync(Guid id);
         Task<Book> FindAsync(string slug);

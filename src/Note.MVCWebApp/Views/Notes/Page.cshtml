@@ -24,7 +24,7 @@
     {
         <text>Updated @Model.UpdatedAt.Value.ToShortDateString() | </text>
     }
-    @if (Auth.CanWrite(Model))
+    @if (Auth.CanWrite(Model.Book))
     {
         <span>
             <a class="ajax-modal-form-trigger" data-url="@Url.Action("Edit", "ManagePages", new { id = Model.Id })" data-title="Edit page">Edit</a> | 

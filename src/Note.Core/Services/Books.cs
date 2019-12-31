@@ -34,7 +34,7 @@ namespace Note.Core.Services
 
         public async Task<List<Book>> GetAllAsync()
         {
-            var books = await _unitOfWork.BookRepository.GetAllAsync(_auth.Login, _auth.IsAdmin);
+            var books = await _unitOfWork.BookRepository.GetAllAllowedAsync(_auth.Login, _auth.IsAdmin);
             return books.ToList();
         }
 

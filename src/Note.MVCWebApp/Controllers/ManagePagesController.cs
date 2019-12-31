@@ -29,8 +29,7 @@ namespace Note.MVCWebApp.Controllers
         {
             return PartialView("_PageForm", new PageFormViewModel
             {
-                BookId = bookId,
-                PublicRead = true
+                BookId = bookId
             });
         }
 
@@ -50,9 +49,7 @@ namespace Note.MVCWebApp.Controllers
                         vm.BookId,
                         vm.Title,
                         vm.Slug,
-                        vm.Published ? State.Published : State.Draft,
-                        vm.PublicRead ? Access.Public : Access.Private,
-                        vm.PublicWrite ? Access.Public : Access.Private));
+                        vm.Published ? State.Published : State.Draft));
 
                 return RedirectToAction("Page", "Notes", new { bookSlug = page.Book.Slug, pageSlug = page.Slug });
             }
@@ -86,9 +83,7 @@ namespace Note.MVCWebApp.Controllers
                         id,
                         vm.Title,
                         vm.Slug,
-                        vm.Published ? State.Published : State.Draft,
-                        vm.PublicRead ? Access.Public : Access.Private,
-                        vm.PublicWrite ? Access.Public : Access.Private));
+                        vm.Published ? State.Published : State.Draft));
 
                 return RedirectToAction("Page", "Notes", new { bookSlug = page.Book.Slug, pageSlug = page.Slug });
             }

@@ -52,7 +52,7 @@ namespace Note.Infra.Data.SqlServer.Repositories
                 .SingleOrDefaultAsync(o => o.Slug == slug);
         }
 
-        public async Task<ICollection<Page>> FindByAsync(Expression<Func<Page, bool>> predicate, string login, bool isAdmin = false)
+        public async Task<ICollection<Page>> FindAllowedByAsync(Expression<Func<Page, bool>> predicate, string login, bool isAdmin = false)
         {
             return await AllowedPagesWithDependingEntities(login, isAdmin)
                 .Where(predicate)
@@ -64,11 +64,6 @@ namespace Note.Infra.Data.SqlServer.Repositories
             return await PagesWithDependingEntities()
                 .Where(predicate)
                 .ToListAsync();
-        }
-
-        public async Task<ICollection<Page>> GetAllAsync(string login, bool isAdmin = false)
-        {
-            return await AllowedPagesWithDependingEntities(login, isAdmin).ToListAsync();
         }
 
         public Page Update(Page page)
@@ -97,7 +92,7 @@ namespace Note.Infra.Data.SqlServer.Repositories
         {
             return _context
                 .Pages
-                .Where(o => isAdmin || o.ReadAccess == Access.Public || o.Owner.Login == login)
+                .Where(o => isAdmin || o.Book.ReadAccess == Access.Public || o.Book.Owner.Login == login)
                 .Include(o => o.Owner)
                 .Include(o => o.Book)
                     .ThenInclude(o => o.Owner);

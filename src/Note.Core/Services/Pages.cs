@@ -35,7 +35,7 @@ namespace Note.Core.Services
         {
             var page = await _unitOfWork.PageRepository.FindAsync(id) ?? throw new NotFoundException(nameof(Page), id);
 
-            if (!_auth.CanRead(page))
+            if (!_auth.CanRead(page.Book))
             {
                 throw new NotAllowedException(_auth.Login, nameof(Book), id);
             }
@@ -47,7 +47,7 @@ namespace Note.Core.Services
         {
             var page = await _unitOfWork.PageRepository.FindAsync(slug) ?? throw new NotFoundException(nameof(Page), slug);
 
-            if (!_auth.CanRead(page))
+            if (!_auth.CanRead(page.Book))
             {
                 throw new NotAllowedException(_auth.Login, nameof(Book), slug);
             }
@@ -80,8 +80,6 @@ namespace Note.Core.Services
                 Title = cmd.Title,
                 Slug = await GetUniqueSlugAsync(cmd.Slug, book.Id),
                 State = cmd.State,
-                ReadAccess = cmd.ReadAccess,
-                WriteAccess = cmd.WriteAccess,
                 Owner = await _auth.GetCurrentUserEntityAsync(),
                 CreatedAt = DateTime.Now
             };
@@ -101,7 +99,7 @@ namespace Note.Core.Services
 
             var page = await _unitOfWork.PageRepository.FindAsync(cmd.Id) ?? throw new NotFoundException(nameof(Page), cmd.Id);
 
-            if (!_auth.CanWrite(page))
+            if (!_auth.CanWrite(page.Book))
             {
                 throw new NotAllowedException(_auth.Login, nameof(Page), cmd.Id);
             }
@@ -109,8 +107,6 @@ namespace Note.Core.Services
             page.Title = cmd.Title;
             page.Slug = await GetUniqueSlugAsync(cmd.Slug, page.Book.Id);
             page.State = cmd.State;
-            page.ReadAccess = cmd.ReadAccess;
-            page.WriteAccess = cmd.WriteAccess;
             page.UpdatedAt = DateTime.Now;
 
             _unitOfWork.PageRepository.Update(page);
@@ -128,7 +124,7 @@ namespace Note.Core.Services
 
             var page = await _unitOfWork.PageRepository.FindAsync(cmd.Id) ?? throw new NotFoundException(nameof(Page), cmd.Id);
 
-            if (!_auth.CanWrite(page))
+            if (!_auth.CanWrite(page.Book))
             {
                 throw new NotAllowedException(_auth.Login, nameof(Page), cmd.Id);
             }
@@ -146,7 +142,7 @@ namespace Note.Core.Services
         {
             var page = await _unitOfWork.PageRepository.FindAsync(id) ?? throw new NotFoundException(nameof(Page), id);
 
-            if (!_auth.CanWrite(page))
+            if (!_auth.CanWrite(page.Book))
             {
                 throw new NotAllowedException(_auth.Login, nameof(Page), id);
             }

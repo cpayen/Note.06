@@ -52,7 +52,7 @@ namespace Note.Infra.Data.SqlServer.Repositories
                 .SingleOrDefaultAsync(o => o.Slug == slug);
         }
 
-        public async Task<ICollection<Book>> FindByAsync(Expression<Func<Book, bool>> predicate, string login, bool isAdmin = false)
+        public async Task<ICollection<Book>> FindAllowedByAsync(Expression<Func<Book, bool>> predicate, string login, bool isAdmin = false)
         {
             return await AllowedBooksWithDependingEntities(login, isAdmin)
                 .Where(predicate)
@@ -66,7 +66,7 @@ namespace Note.Infra.Data.SqlServer.Repositories
                 .ToListAsync();
         }
 
-        public async Task<ICollection<Book>> GetAllAsync(string login, bool isAdmin = false)
+        public async Task<ICollection<Book>> GetAllAllowedAsync(string login, bool isAdmin = false)
         {
             return await AllowedBooksWithDependingEntities(login, isAdmin).ToListAsync();
         }

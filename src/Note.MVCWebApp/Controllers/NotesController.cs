@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Note.Core.Services;
-using System;
 using System.Threading.Tasks;
 
 namespace Note.MVCWebApp.Controllers
