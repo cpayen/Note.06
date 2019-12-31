@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -95,6 +96,17 @@ namespace Note.MVCWebApp
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            // Route default AzureAD logout to home
+            app.UseRewriter(
+                new RewriteOptions().Add(
+                    context => {
+                        if (context.HttpContext.Request.Path == "/AzureAD/Account/SignedOut")
+                        { 
+                            context.HttpContext.Response.Redirect("/"); 
+                        }
+                    })
+            );
 
             app.UseEndpoints(endpoints =>
             {
