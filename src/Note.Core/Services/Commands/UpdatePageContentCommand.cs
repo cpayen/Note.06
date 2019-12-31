@@ -2,7 +2,7 @@
 using System;
 using System.Text;
 
-namespace Note.Core.Services
+namespace Note.Core.Services.Commands
 {
     public class UpdatePageContentCommand : ICommand
     {

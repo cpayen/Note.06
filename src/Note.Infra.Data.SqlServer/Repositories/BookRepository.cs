@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Note.Core.Data.Repositories;
+using Note.Core.Entities;
+using Note.Core.Enums;
+using Note.Infra.Data.SQLServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Note.Core.Data.Repositories;
-using Note.Core.Entities;
-using Note.Core.Entities.Base;
-using Note.Core.Enums;
-using Note.Infra.Data.SQLServer;
 
 namespace Note.Infra.Data.SqlServer.Repositories
 {
@@ -89,64 +88,19 @@ namespace Note.Infra.Data.SqlServer.Repositories
         {
             return _context
                 .Books
-                .Select(o => new Book
-                {
-                    Id = o.Id,
-                    Owner = o.Owner,
-                    Title = o.Title,
-                    Slug = o.Slug,
-                    Description = o.Description,
-                    ReadAccess = o.ReadAccess,
-                    WriteAccess = o.WriteAccess,
-                    CreatedAt = o.CreatedAt,
-                    UpdatedAt = o.UpdatedAt,
-                    Pages = o.Pages.Select(p => new Page
-                    {
-                        Id = p.Id,
-                        Book = o,
-                        Owner = p.Owner,
-                        Title = p.Title,
-                        Slug = p.Slug,
-                        Description = p.Description,
-                        ReadAccess = p.ReadAccess,
-                        WriteAccess = p.WriteAccess,
-                        CreatedAt = p.CreatedAt,
-                        UpdatedAt = p.UpdatedAt,
-                        State = p.State
-                    })
-                });
+                .Include(o => o.Owner)
+                .Include(o => o.Pages)
+                    .ThenInclude(o => o.Owner);
         }
 
         protected IQueryable<Book> AllowedBooksWithDependingEntities(string login, bool isAdmin = false)
         {
             return _context
-                   .Books.Where(o => isAdmin || o.ReadAccess == Access.Public || o.Owner.Login == login)
-                   .Select(o => new Book
-                   {
-                       Id = o.Id,
-                       Owner = o.Owner,
-                       Title = o.Title,
-                       Slug = o.Slug,
-                       Description = o.Description,
-                       ReadAccess = o.ReadAccess,
-                       WriteAccess = o.WriteAccess,
-                       CreatedAt = o.CreatedAt,
-                       UpdatedAt = o.UpdatedAt,
-                       Pages = o.Pages.Where(o => isAdmin || o.ReadAccess == Access.Public || o.Owner.Login == login).Select(p => new Page
-                       {
-                           Id = p.Id,
-                           Book = o,
-                           Owner = p.Owner,
-                           Title = p.Title,
-                           Slug = p.Slug,
-                           Description = p.Description,
-                           ReadAccess = p.ReadAccess,
-                           WriteAccess = p.WriteAccess,
-                           CreatedAt = p.CreatedAt,
-                           UpdatedAt = p.UpdatedAt,
-                           State = p.State
-                       })
-                   });
+                .Books
+                .Where(o => isAdmin || o.ReadAccess == Access.Public || o.Owner.Login == login)
+                .Include(o => o.Owner)
+                .Include(o => o.Pages)
+                    .ThenInclude(o => o.Owner);
         }
 
         #endregion

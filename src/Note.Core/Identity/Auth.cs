@@ -15,10 +15,11 @@ namespace Note.Core.Identity
 
     public class Auth : IAuth
     {
-        public const string AnonymousUserLogin = "Nnonymous";
 
         #region Props
 
+        public const string AnonymousUserLogin = "Anonymous";
+        
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly ICurrentUser _currentUser;
         private User _currentUserEntity;
