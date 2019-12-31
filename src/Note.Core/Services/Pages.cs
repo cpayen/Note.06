@@ -5,6 +5,7 @@ using Note.Core.Helpers;
 using Note.Core.Identity;
 using Note.Core.Services.Commands;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,6 +31,12 @@ namespace Note.Core.Services
         #endregion
 
         #region CRUD
+
+        public async Task<List<Page>> GetLatestPagesAsync(int pagesCount)
+        {
+            var pages = await _unitOfWork.PageRepository.FindAllowedLatestAsync(pagesCount, _auth.Login, _auth.IsAdmin);
+            return pages.ToList();
+        }
 
         public async Task<Page> FindAsync(Guid id)
         {

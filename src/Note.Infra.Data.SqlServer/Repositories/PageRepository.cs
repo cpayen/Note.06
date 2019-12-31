@@ -59,6 +59,14 @@ namespace Note.Infra.Data.SqlServer.Repositories
                 .ToListAsync();
         }
 
+        public async Task<ICollection<Page>> FindAllowedLatestAsync(int pagesCount, string login, bool isAdmin = false)
+        {
+            return await AllowedPagesWithDependingEntities(login, isAdmin)
+                .OrderByDescending(o => o.UpdatedAt  != null ? o.UpdatedAt : o.CreatedAt)
+                .Take(pagesCount)
+                .ToListAsync();
+        }
+
         public async Task<ICollection<Page>> FindByAsync(Expression<Func<Page, bool>> predicate)
         {
             return await PagesWithDependingEntities()

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Note.Core.Services;
+using Note.MVCWebApp.Models;
 using System.Threading.Tasks;
 
 namespace Note.MVCWebApp.Controllers
@@ -24,8 +25,13 @@ namespace Note.MVCWebApp.Controllers
         [HttpGet()]
         public async Task<IActionResult> IndexAsync()
         {
-            var model = await _books.GetAllAsync();
-            return View(model);
+            var books = await _books.GetAllAsync();
+            var latestPages = await _pages.GetLatestPagesAsync(10);
+            return View(new NotesHomeViewModel
+            {
+                Books = books,
+                LatestPages = latestPages
+            });
         }
 
         [HttpGet("{bookSlug}")]

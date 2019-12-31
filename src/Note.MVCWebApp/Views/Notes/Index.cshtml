@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Note.Core.Entities.Book>
+﻿@model Note.MVCWebApp.Models.NotesHomeViewModel
 @using Note.MVCWebApp.Models
 
 @{
@@ -12,22 +12,35 @@
     </ol>
 </nav>
 
-<h1>Books</h1>
+<h1>Notes</h1>
 
 <partial name="_DisplayTempDataErrorsPartial" />
 
 <section>
+    <h2>Books</h2>
     <ul>
         @if (Auth.IsAuthenticated)
         {
             <li>
-                <a class="ajax-modal-form-trigger" data-url="@Url.Action("Create", "ManageBooks")" data-title="New book">New...</a><br />
+                <a class="ajax-modal-form-trigger" data-url="@Url.Action("Create", "ManageBooks")" data-title="New book">New...</a>
             </li>
         }
-        @foreach (var book in Model)
+        @foreach (var b in Model.Books)
         {
             <li>
-                <a asp-action="Book" asp-controller="Notes" asp-route-bookSlug="@book.Slug">@book.Title</a>
+                <a asp-action="Book" asp-controller="Notes" asp-route-bookSlug="@b.Slug">@b.Title</a> (@b.PageCount)
+            </li>
+        }
+    </ul>
+</section>
+
+<section>
+    <h2>Latest pages</h2>
+    <ul>
+        @foreach (var p in Model.LatestPages)
+        {
+            <li>
+                <a asp-action="Page" asp-controller="Notes" asp-route-bookSlug="@p.Book.Slug" asp-route-pageSlug="@p.Slug">@p.Title</a>
             </li>
         }
     </ul>
