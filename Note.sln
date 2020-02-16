@@ -13,7 +13,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{7FF69684-BC7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{79E1AB35-ED1F-4849-BB46-D5A4252CE183}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Note.MVCWebApp", "src\Note.MVCWebApp\Note.MVCWebApp.csproj", "{E779523D-ADC8-46AB-8867-328C9A6F7183}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Note.MVCWebApp", "src\Note.MVCWebApp\Note.MVCWebApp.csproj", "{E779523D-ADC8-46AB-8867-328C9A6F7183}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{7E0948EC-CDDA-437C-B477-2333987912E2}"
+	ProjectSection(SolutionItems) = preProject
+		doc\TODO.md = doc\TODO.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
