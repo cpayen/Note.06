@@ -46,10 +46,10 @@ namespace Note.Infra.Data.SqlServer.Repositories
                 .SingleOrDefaultAsync(o => o.Id == id);
         }
 
-        public async Task<Page> FindAsync(string slug)
+        public async Task<Page> FindAsync(string bookSlug, string pageSlug)
         {
             return await PagesWithDependingEntities()
-                .SingleOrDefaultAsync(o => o.Slug == slug);
+                .SingleOrDefaultAsync(o => o.Book.Slug == bookSlug && o.Slug == pageSlug);
         }
 
         public async Task<ICollection<Page>> FindAllowedByAsync(Expression<Func<Page, bool>> predicate, string login, bool isAdmin = false)

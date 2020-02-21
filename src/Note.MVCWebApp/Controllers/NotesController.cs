@@ -44,7 +44,7 @@ namespace Note.MVCWebApp.Controllers
         [HttpGet("{bookSlug}/{pageSlug}")]
         public async Task<IActionResult> PageAsync(string bookSlug, string pageSlug)
         {
-            var model = await _pages.FindAsync(pageSlug);
+            var model = await _pages.FindAsync(bookSlug, pageSlug);
             return View(model);
         }
     }

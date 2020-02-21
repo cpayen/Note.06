@@ -6,6 +6,13 @@
     <WebProject_DirectoryAccessLevelKey>0</WebProject_DirectoryAccessLevelKey>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Views\Error\**" />
+    <Content Remove="Views\Error\**" />
+    <EmbeddedResource Remove="Views\Error\**" />
+    <None Remove="Views\Error\**" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.18.0" />
@@ -32,11 +39,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Note.Infra.Data.SqlServer\Note.Infra.Data.SqlServer.csproj" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Views\Error\" />
   </ItemGroup>
 
 </Project>
