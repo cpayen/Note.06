@@ -5,6 +5,9 @@ Note
 - Search (?)
 - Content types (article, code)
 
+MVC web app
+- Generate slug from title
+
 Front
 
 - Angular

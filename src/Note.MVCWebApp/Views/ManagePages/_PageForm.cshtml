@@ -17,6 +17,11 @@
         <textarea asp-for="@Model.Description" class="form-control"></textarea>
     </div>
     <div class="form-group">
+        <label asp-for="@Model.Type">Type</label>
+        <select asp-for="@Model.Type" asp-items="Html.GetEnumSelectList<Note.Core.Enums.PageType>()" class="form-control"></select>
+        <span class="text-danger">@Html.ValidationMessageFor(model => model.Slug)</span>
+    </div>
+    <div class="form-group">
         <div class="custom-control custom-checkbox">
             <input asp-for="@Model.Published" type="checkbox" class="custom-control-input">
             <label asp-for="@Model.Published" class="custom-control-label">Published</label>

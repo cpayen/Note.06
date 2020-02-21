@@ -49,7 +49,8 @@ namespace Note.MVCWebApp.Controllers
                         vm.BookId,
                         vm.Title,
                         vm.Slug,
-                        vm.Published ? State.Published : State.Draft));
+                        vm.Published ? State.Published : State.Draft,
+                        vm.Type));
 
                 return RedirectToAction("Page", "Notes", new { bookSlug = page.Book.Slug, pageSlug = page.Slug });
             }
@@ -83,7 +84,8 @@ namespace Note.MVCWebApp.Controllers
                         id,
                         vm.Title,
                         vm.Slug,
-                        vm.Published ? State.Published : State.Draft));
+                        vm.Published ? State.Published : State.Draft,
+                        vm.Type));
 
                 return RedirectToAction("Page", "Notes", new { bookSlug = page.Book.Slug, pageSlug = page.Slug });
             }

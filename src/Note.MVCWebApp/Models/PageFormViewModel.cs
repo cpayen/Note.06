@@ -18,6 +18,9 @@ namespace Note.MVCWebApp.Models
         [Required(AllowEmptyStrings = false), MaxLength(100), RegularExpression(SlugHelper.ValidSludRegex)]
         public string Slug { get; set; }
         public string Description { get; set; }
+        
+        [Required]
+        public PageType Type { get; set; }
         public bool Published { get; set; }
 
         public PageFormViewModel()
@@ -35,6 +38,7 @@ namespace Note.MVCWebApp.Models
             Title = page.Title;
             Slug = page.Slug;
             Description = page.Description;
+            Type = page.Type;
             Published = page.State == State.Published;
         }
     }

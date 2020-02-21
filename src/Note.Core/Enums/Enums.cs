@@ -11,4 +11,10 @@
         Private,
         Public
     }
+
+    public enum PageType
+    {
+        Article,
+        Code
+    }
 }

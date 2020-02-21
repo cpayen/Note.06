@@ -11,6 +11,7 @@ namespace Note.Core.Entities
         public string Slug { get; set; }
         public string Description { get; set; }
         public string Content { get; set; }
+        public PageType Type { get; set; }
         public State State { get; set; }
         public virtual User Owner { get; set; }
         public virtual Book Book { get; set; }

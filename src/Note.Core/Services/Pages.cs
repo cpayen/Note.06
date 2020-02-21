@@ -86,6 +86,7 @@ namespace Note.Core.Services
                 Book = book,
                 Title = cmd.Title,
                 Slug = await GetUniqueSlugAsync(cmd.Slug, book.Id),
+                Type = cmd.Type,
                 State = cmd.State,
                 Owner = await _auth.GetCurrentUserEntityAsync(),
                 CreatedAt = DateTime.Now
@@ -113,6 +114,7 @@ namespace Note.Core.Services
 
             page.Title = cmd.Title;
             page.Slug = await GetUniqueSlugAsync(cmd.Slug, page.Book.Id);
+            page.Type = cmd.Type;
             page.State = cmd.State;
             page.UpdatedAt = DateTime.Now;
 
