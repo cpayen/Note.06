@@ -2,7 +2,8 @@ Note
 
 - Bookmarks
 - Categories
-- Search
+- Search (?)
+- Content types (article, code)
 
 Front
 
