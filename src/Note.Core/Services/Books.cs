@@ -101,7 +101,7 @@ namespace Note.Core.Services
             }
 
             book.Title = cmd.Title;
-            book.Slug = await GetUniqueSlugAsync(cmd.Slug);
+            book.Slug = await GetUniqueSlugAsync(cmd.Slug, book.Id);
             book.Description = cmd.Description;
             book.ReadAccess = cmd.ReadAccess;
             book.WriteAccess = cmd.WriteAccess;
@@ -132,9 +132,9 @@ namespace Note.Core.Services
 
         #region Utils
 
-        public async Task<string> GetUniqueSlugAsync(string slug)
+        public async Task<string> GetUniqueSlugAsync(string slug, Guid? bookId = null)
         {
-            var booksWithSameSlugs = await _unitOfWork.BookRepository.FindByAsync(o => o.Slug.StartsWith(slug));
+            var booksWithSameSlugs = await _unitOfWork.BookRepository.FindByAsync(o => o.Id != bookId && o.Slug.StartsWith(slug));
             var existingSlugs = booksWithSameSlugs.Select(o => o.Slug);
             return SlugHelper.GetUniqueSlug(slug, existingSlugs);
         }

@@ -109,11 +109,11 @@ namespace Note.Core.Services
 
             if (!_auth.CanWrite(page.Book))
             {
-                throw new NotAllowedException(_auth.Login, nameof(Page), cmd.Id);
+                throw new NotAllowedException(_auth.Login, nameof(Page), page.Id);
             }
 
             page.Title = cmd.Title;
-            page.Slug = await GetUniqueSlugAsync(cmd.Slug, page.Book.Id);
+            page.Slug = await GetUniqueSlugAsync(cmd.Slug, page.Book.Id, page.Id);
             page.Type = cmd.Type;
             page.State = cmd.State;
             page.UpdatedAt = DateTime.Now;
@@ -166,10 +166,16 @@ namespace Note.Core.Services
 
         #region Utils
 
-        public async Task<string> GetUniqueSlugAsync(string slug, Guid bookId)
+        public async Task<string> GetUniqueSlugAsync(string slug, Guid bookId, Guid? pageId = null)
         {
-            var pagesWithSameSlugs = await _unitOfWork.PageRepository.FindByAsync(o => o.Book.Id == bookId && o.Slug.StartsWith(slug));
+            var pagesWithSameSlugs = await _unitOfWork.PageRepository.FindByAsync(o => o.Book.Id == bookId && o.Id != pageId && o.Slug.StartsWith(slug));
             var existingSlugs = pagesWithSameSlugs.Select(o => o.Slug);
+
+            if(!existingSlugs.Any(o => o == slug))
+            {
+                return slug;
+            }
+
             return SlugHelper.GetUniqueSlug(slug, existingSlugs);
         }
 
