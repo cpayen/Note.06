@@ -1,0 +1,42 @@
+﻿@model Note.MVCWebApp.Models.ToggleBookmarkViewModel
+
+<form 
+    asp-controller="ManagePages" 
+    asp-action="ToggleBookmark"
+    asp-route-id="@Model.PageId"
+    data-ajax="true" 
+    data-ajax-method="POST"
+    data-ajax-begin="onBegin" 
+    data-ajax-complete="onComplete" 
+    data-ajax-failure="onFailed" 
+    data-ajax-success="onSuccess">
+    @{ 
+        var btnClasses = Model.BookmarkExists ? "btn btn-danger" : "btn btn-primary";
+    }
+    <button id="toggle-bookmark-btn" class="@btnClasses" type="submit">Bookmark</button>
+</form>
+
+<script>
+    var onBegin = function () {
+        $('#toggle-bookmark-btn').attr('disabled', true);
+    };
+
+    var onComplete = function () {
+        $('#toggle-bookmark-btn').attr('disabled', false);
+    };
+
+    var onSuccess = function (context) {
+        switch (context.result) {
+            case 'created':
+                $('#toggle-bookmark-btn').removeClass('btn-primary').addClass('btn-danger');
+                break;
+            case 'deleted':
+                $('#toggle-bookmark-btn').removeClass('btn-danger').addClass('btn-primary');
+                break;
+        }
+    };
+
+    var onFailed = function(context){
+        console.error(context);
+    };
+</script>

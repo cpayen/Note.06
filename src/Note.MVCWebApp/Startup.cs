@@ -47,6 +47,7 @@ namespace Note.MVCWebApp
             services.AddScoped<Users>();
             services.AddScoped<Books>();
             services.AddScoped<Pages>();
+            services.AddScoped<Bookmarks>();
 
             // Azure AD authentication
             services.AddAuthentication(AzureADDefaults.AuthenticationScheme)

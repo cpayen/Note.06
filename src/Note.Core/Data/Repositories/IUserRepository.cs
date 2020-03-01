@@ -7,7 +7,7 @@ namespace Note.Core.Data.Repositories
     public interface IUserRepository
     {
         Task<User> FindAsync(Guid id);
-        Task<User> FindAsync(string id);
+        Task<User> FindAsync(string login);
         User Create(User user);
         User Update(User user);
     }

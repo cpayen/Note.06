@@ -16,12 +16,14 @@ namespace Note.MVCWebApp.Controllers
     public class ManagePagesController : ManageController
     {
         protected readonly Pages _pages;
+        protected readonly Bookmarks _bookmarks;
         protected readonly ILogger<ManagePagesController> _logger;
 
-        public ManagePagesController(Pages pages, ILogger<ManagePagesController> logger)
+        public ManagePagesController(Pages pages, Bookmarks bookmarks, ILogger<ManagePagesController> logger)
         {
             _pages = pages;
             _logger = logger;
+            _bookmarks = bookmarks;
         }
 
         [HttpGet("create"), ActionName("Create")]
@@ -148,6 +150,23 @@ namespace Note.MVCWebApp.Controllers
             {
                 _logger.LogError(ex, "Error");
                 return BackWithError("Error", "An error occurred while processing your request.");
+            }
+        }
+
+        [HttpPost("{id}/bookmark/toggle"), ActionName("ToggleBookmark")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PostToggleBookmarkAsync(Guid id)
+        {
+            try
+            {
+                var bookmark = await _bookmarks.ToggleForCurrentUserAsync(id);
+                var result = bookmark == null ? "deleted" : "created";
+                return Ok(new { result });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return Problem("An error occurred while processing your request.", null, 500, "Error");
             }
         }
     }

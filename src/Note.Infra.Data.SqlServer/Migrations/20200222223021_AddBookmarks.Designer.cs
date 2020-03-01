@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Note.Infra.Data.SQLServer;
 
 namespace Note.Infra.Data.SqlServer.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20200222223021_AddBookmarks")]
+    partial class AddBookmarks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,6 +78,11 @@ namespace Note.Infra.Data.SqlServer.Migrations
                     b.Property<Guid?>("PageId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -85,6 +92,8 @@ namespace Note.Infra.Data.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PageId");
+
+                    b.HasIndex("Title");
 
                     b.HasIndex("UserId");
 

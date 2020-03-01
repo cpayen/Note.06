@@ -8,6 +8,7 @@ namespace Note.Core.Data
         IUserRepository UserRepository { get; }
         IBookRepository BookRepository { get; }
         IPageRepository PageRepository { get; }
+        IBookmarkRepository BookmarkRepository { get; }
         Task SaveAsync();
     }
 }

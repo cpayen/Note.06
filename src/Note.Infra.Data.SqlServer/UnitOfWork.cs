@@ -12,6 +12,7 @@ namespace Note.Infra.Data.SQLServer
         private IUserRepository _userRepository;
         private IBookRepository _bookRepository;
         private IPageRepository _pageRepository;
+        private IBookmarkRepository _bookmarkRepository;
 
         public UnitOfWork(Context context)
         {
@@ -51,6 +52,18 @@ namespace Note.Infra.Data.SQLServer
                     _pageRepository = new PageRepository(_context);
                 }
                 return _pageRepository;
+            }
+        }
+
+        public IBookmarkRepository BookmarkRepository
+        {
+            get
+            {
+                if (_bookmarkRepository == null)
+                {
+                    _bookmarkRepository = new BookmarkRepository(_context);
+                }
+                return _bookmarkRepository;
             }
         }
 

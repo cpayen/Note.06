@@ -12,5 +12,14 @@ namespace Note.MVCWebApp.Controllers.Base
 
             return Redirect(Request.Headers["Referer"].ToString());
         }
+
+        protected IActionResult RedirectToActionWithError(string actionName, string controllerName, object routeValues, string errorTitle, string errorMessage)
+        {
+            TempData["HasError"] = true;
+            TempData["ErrorTitle"] = errorTitle;
+            TempData["ErrorMessage"] = errorMessage;
+
+            return RedirectToAction(actionName, controllerName, routeValues);
+        }
     }
 }

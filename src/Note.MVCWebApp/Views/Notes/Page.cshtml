@@ -1,4 +1,5 @@
 ﻿@model Note.Core.Entities.Page
+@using Note.MVCWebApp.ViewComponents
 @using Markdig
 
 @{
@@ -27,10 +28,11 @@
     @if (Auth.CanWrite(Model.Book))
     {
         <span>
-            <a class="ajax-modal-form-trigger" data-url="@Url.Action("Edit", "ManagePages", new { id = Model.Id })" data-title="Edit page">Edit</a> | 
-            <a class="ajax-modal-form-trigger" data-url="@Url.Action("Delete", "ManagePages", new { id = Model.Id })" data-title="Delete page">Delete</a> | 
+            <a class="ajax-modal-form-trigger" data-url="@Url.Action("Edit", "ManagePages", new { id = Model.Id })" data-title="Edit page">Edit</a> |
+            <a class="ajax-modal-form-trigger" data-url="@Url.Action("Delete", "ManagePages", new { id = Model.Id })" data-title="Delete page">Delete</a> |
             <a class="ajax-modal-form-trigger" data-url="@Url.Action("Write", "ManagePages", new { id = Model.Id })" data-title="Write page" data-modal-size="modal-xl">Write</a>
         </span>
+        <vc:page-bookmark page-id="@Model.Id"></vc:page-bookmark>
     }
 </section>
 
